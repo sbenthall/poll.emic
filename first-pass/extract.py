@@ -4,43 +4,39 @@ import sys
 from pprint import pprint as pp
 
 TWEET_PATTERN = "(\w*) (\d*)\nDate\: (.*)\n\n    (.*)\n"
-DUMP_PATH = "../sample-data/"
+LOG_PATH = "log/"
+DUMP_PATH = "sample-data/tweets.txt"
 URL_REGEX = "http\://\S*"
+
+usernames = ["BarackObama", "SarahPalinUSA"]
 
 def get_log(username):
     log_name = username + ".txt"    
-    log = open(log_name,'r')
+    log = open(LOG_PATH + log_name,'r')
     return log    
 
 def clean_out_urls(tweet):
     return re.sub(URL_REGEX, '', tweet)
 
 def main():
-    if len(sys.argv) > 1 :
-        username = sys.argv[1]
-    else:
-        print("Please provide a username")
-        return
 
-    log = get_log(username)
-    matches = re.findall(TWEET_PATTERN, log.read())
+    tweet_file = open("%s" % (DUMP_PATH),'w')
 
-    try:
-        os.mkdir(DUMP_PATH + username)
-    except OSError:
-        pass # directory already exists
+    for username in usernames:
+        
+        log = get_log(username)
+        matches = re.findall(TWEET_PATTERN, log.read())
 
-    for (name,number,date,tweet) in matches:
-        tweet_file = open("%s/%s/%s-%s.txt" % (DUMP_PATH,username,name,number),'w')
+        for (name,number,date,tweet) in matches:
+            # clean out URLs to get rid of bogus 'words'
+            clean_tweet = clean_out_urls(tweet)
 
-        # clean out URLs to get rid of bogus 'words'
-        clean_tweet = clean_out_urls(tweet)
+            print(clean_tweet)
 
-        print(clean_tweet)
+            tweet_file.write("twitter %s %s\n" % (username, clean_tweet))
+            tweet_file.flush()
 
-        tweet_file.write(clean_tweet)
-        tweet_file.close
-
+    tweet_file.close()
 
 if __name__ == "__main__":
     main()

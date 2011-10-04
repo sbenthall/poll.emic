@@ -1,4 +1,15 @@
-THROTTLE = 200
+from twitter import Twitter, TwitterHTTPError, OAuth
+import ConfigParser
+
+THROTTLE = 2000
+
+config= ConfigParser.ConfigParser()
+config.read('config.cfg')
+
+twitter = Twitter(auth=OAuth(config.get('OAuth','accesstoken'),
+                             config.get('OAuth','accesstokenkey'),
+                             config.get('OAuth','consumerkey'),
+                             config.get('OAuth','consumersecret')))
 
 def lookup(user_id):
     # return user's metadata information

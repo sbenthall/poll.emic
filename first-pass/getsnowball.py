@@ -72,7 +72,13 @@ def get_snowball_s(start, hops, mutual):
                 metadata = lookup(user_id)
                 snowball_set[user_id] = metadata
                 
-                if metadata['followers_count'] < THROTTLE:
+                if h == hops-1:
+                    pass #final hop, skip collecting freinds and followers
+                    
+                elif metadata['followers_count'] > THROTTLE:
+                    print "followers exceed ", THROTTLE, ", skipped"
+                
+                else:
                     #look into each user's f&f
                     #related_users is a set of accounts that connect to user_id
                     if mutual:
@@ -86,9 +92,6 @@ def get_snowball_s(start, hops, mutual):
                 
                     #append all related users of each user_id in to_crawl into one big set
                     all_related_users = all_related_users.union( related_users )
-                
-                else:
-                    print "followers exceed ", THROTTLE, ", skipped"
             
         #print "all_related_users: ", all_related_users
         #clean up to_crawl, add all_related_users to to_crawl, except those already in snowball_set

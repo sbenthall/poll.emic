@@ -3,7 +3,7 @@ import ConfigParser
 import urllib2
 import simplejson as json
 
-THROTTLE = 500
+THROTTLE = 1000
 
 config= ConfigParser.ConfigParser()
 config.read('config.cfg')
@@ -118,7 +118,13 @@ def get_snowball_s(start, hops, mutual):
 
     return snowball_set
 
-print get_snowball_s(47545000, 2, False)
+
+snowball = get_snowball_s(47545000, 2, False)
+
+print snowball
+
+print [(k, m['followers_count']) for k,m in snowball.items()]
+
 
 
 

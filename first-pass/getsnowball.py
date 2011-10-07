@@ -1,7 +1,9 @@
 from twitter import Twitter, TwitterHTTPError, OAuth
 import ConfigParser
+import urllib2
+import simplejson as json
 
-THROTTLE = 2000
+THROTTLE = 500
 
 config= ConfigParser.ConfigParser()
 config.read('config.cfg')
@@ -13,15 +15,34 @@ twitter = Twitter(auth=OAuth(config.get('OAuth','accesstoken'),
 
 def lookup(user_id):
     # return user's metadata information
-    return {'screen_name': 'abc', 'followers_count' : 4}
+    try:
+        return twitter.users.lookup(user_id=user_id)[0]
+    except TwitterHTTPError as e:
+        print e
+        return {'followers_count': THROTTLE+1} #hack to prevent crawling this
+
+API_URL = "http://api.twitter.com/1/"
 
 def get_friends(user_id):
-    #return array of ids of users that user_id follows
-    return {1,2,3,4,5}
+    try:
+        url = "%sfriends/ids.json?user_id=%d" % (API_URL, user_id)
+        from_twitter = urllib2.urlopen(url)
+        friends = json.loads(from_twitter.read())
+        return set(friends)
+    except urllib2.HTTPError:
+        return set()
+
+
+    return {755994494} #twitter.friends(user_id=user_id)
 
 def get_followers(user_id):
-    #return array of ids of users that follow user_id
-    return {5,6,7,8}
+    try:
+        url = "%sfollowers/ids.json?user_id=%d" % (API_URL, user_id)
+        from_twitter = urllib2.urlopen(url)
+        followers = json.loads(from_twitter.read())
+        return set(followers)
+    except urllib2.HTTPError:
+        return set()
 
 def get_snowball(start, hops, mutual=False):
     snowball = {} # dictionary of (id, metadata) pairs
@@ -97,7 +118,7 @@ def get_snowball_s(start, hops, mutual):
 
     return snowball_set
 
-print get_snowball_s(4, 2, False)
+print get_snowball_s(47545000, 2, False)
 
 
 

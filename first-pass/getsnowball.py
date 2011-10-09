@@ -8,10 +8,12 @@ THROTTLE = 1000
 config= ConfigParser.ConfigParser()
 config.read('config.cfg')
 
-twitter = Twitter(auth=OAuth(config.get('OAuth','accesstoken'),
+oauth = OAuth(config.get('OAuth','accesstoken'),
                              config.get('OAuth','accesstokenkey'),
                              config.get('OAuth','consumerkey'),
-                             config.get('OAuth','consumersecret')))
+                             config.get('OAuth','consumersecret'))
+
+twitter = Twitter(auth=oauth)
 
 def lookup(user_id):
     # return user's metadata information
@@ -25,23 +27,18 @@ API_URL = "http://api.twitter.com/1/"
 
 def get_friends(user_id):
     try:
-        url = "%sfriends/ids.json?user_id=%d" % (API_URL, user_id)
-        from_twitter = urllib2.urlopen(url)
-        friends = json.loads(from_twitter.read())
+        friends = twitter.friends.ids(user_id=user_id)
         return set(friends)
-    except urllib2.HTTPError:
+    except urllib2.HTTPError as e:
+        print e
         return set()
-
-
-    return {755994494} #twitter.friends(user_id=user_id)
 
 def get_followers(user_id):
     try:
-        url = "%sfollowers/ids.json?user_id=%d" % (API_URL, user_id)
-        from_twitter = urllib2.urlopen(url)
-        followers = json.loads(from_twitter.read())
+        followers = friends = twitter.followers.ids(user_id=user_id)
         return set(followers)
-    except urllib2.HTTPError:
+    except urllib2.HTTPError as e:
+        print e
         return set()
 
 def get_snowball(start, hops, mutual=False):

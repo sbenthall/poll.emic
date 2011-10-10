@@ -2,6 +2,14 @@ from twitter import Twitter, TwitterHTTPError, OAuth
 import ConfigParser
 import urllib2
 import simplejson as json
+import logging
+logger = logging.getLogger('getsnowball')
+#todo: use date/time as the log file name
+hdlr = logging.FileHandler('./logging/getsnowball.log')
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+hdlr.setFormatter(formatter)
+logger.addHandler(hdlr) 
+logger.setLevel(logging.DEBUG)
 
 THROTTLE = 1000
 
@@ -28,6 +36,7 @@ API_URL = "http://api.twitter.com/1/"
 def get_friends(user_id):
     try:
         friends = twitter.friends.ids(user_id=user_id)
+        logger.debug("id: %s \n friends: %s ", user_id, friends)
         return set(friends)
     except urllib2.HTTPError as e:
         print e
@@ -36,6 +45,7 @@ def get_friends(user_id):
 def get_followers(user_id):
     try:
         followers = friends = twitter.followers.ids(user_id=user_id)
+        logger.debug("id: %s \n followers: %s ", user_id, followers)
         return set(followers)
     except urllib2.HTTPError as e:
         print e
@@ -77,6 +87,7 @@ def get_snowball(start, hops, mutual=False):
 
 
 def get_snowball_s(start, hops, mutual):
+    logger.info("*** snowball starts!!!")
     snowball_set = {}
     to_crawl = set({start})
     
@@ -107,6 +118,8 @@ def get_snowball_s(start, hops, mutual):
                         related_users = get_friends(user_id).union( get_followers(user_id) )
                     
                     print "related_users: ", related_users
+                    logger.info("no. of related users: %i", len(related_users))
+                    logger.debug("related users: %s", related_users)
                 
                     #append all related users of each user_id in to_crawl into one big set
                     all_related_users = all_related_users.union( related_users )
@@ -119,9 +132,11 @@ def get_snowball_s(start, hops, mutual):
     return snowball_set
 
 
-snowball = get_snowball_s(47545000, 2, False)
+snowball = get_snowball_s(47545000, 3, False)
 
-print snowball
+logger.info("total crawled: %i", len(snowball))
+
+#print snowball
 
 print [(k, m['followers_count']) for k,m in snowball.items()]
 

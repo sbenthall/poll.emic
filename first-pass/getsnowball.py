@@ -131,8 +131,11 @@ def get_snowball_s(start, hops, mutual):
 
     return snowball_set
 
+EGO = 47545000
+HOPS = 3
 
-snowball = get_snowball_s(47545000, 3, False)
+
+snowball = get_snowball_s(EGO, HOPS, False)
 
 logger.info("total crawled: %i", len(snowball))
 
@@ -140,8 +143,9 @@ logger.info("total crawled: %i", len(snowball))
 
 print [(k, m['followers_count']) for k,m in snowball.items()]
 
-
-
+#write to file -- raw json representation of the snowball
+file = open('snowball-%d-%d.json'%(EGO,HOPS),'w')
+file.write(json.dumps(snowball))
 
 
 

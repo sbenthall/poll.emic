@@ -38,7 +38,7 @@ def get_friends(user_id):
         friends = twitter.friends.ids(user_id=user_id)
         logger.debug("id: %s \n friends: %s ", user_id, friends)
         return set(friends)
-    except urllib2.HTTPError as e:
+    except TwitterHTTPError as e:
         print e
         return set()
 
@@ -47,7 +47,7 @@ def get_followers(user_id):
         followers = friends = twitter.followers.ids(user_id=user_id)
         logger.debug("id: %s \n followers: %s ", user_id, followers)
         return set(followers)
-    except urllib2.HTTPError as e:
+    except TwitterHTTPError as e:
         print e
         return set()
 

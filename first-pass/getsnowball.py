@@ -1,10 +1,11 @@
-from twitter import Twitter, TwitterHTTPError, OAuth
+from twitter import Twitter, TwitterHTTPError
 import ConfigParser
 import urllib2
 import simplejson as json
 import logging
 import os
 import random
+from authtwitter import twitter
 
 logger = logging.getLogger('getsnowball')
 #todo: use date/time as the log file name
@@ -21,15 +22,6 @@ FRIENDS_PATH = "accounts/friends/"
 FOLLOWERS_PATH = "accounts/followers/"
 FILTER_RANDOM = False   #when filter followers, true: pick randomly,
                         #false: pick from beginning
-config= ConfigParser.ConfigParser()
-config.read('config.cfg')
-
-oauth = OAuth(config.get('OAuth','accesstoken'),
-                             config.get('OAuth','accesstokenkey'),
-                             config.get('OAuth','consumerkey'),
-                             config.get('OAuth','consumersecret'))
-
-twitter = Twitter(auth=oauth)
 
 def lookup(user_id):
     # return user's metadata information

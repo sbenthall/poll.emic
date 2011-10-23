@@ -51,13 +51,13 @@ def parse_txt_log(username):
     log = get_txt_log(username)
     matches = re.findall(TWEET_PATTERN, log)
 
-    return [clean_out_urls(tweet) for (name,number,date,tweet) in matches]
+    return [clean(tweet) for (name,number,date,tweet) in matches]
 
 def parse_json_log(username):
     log_name = "%s%s.json"%(LOG_PATH,username) 
     if os.path.isfile(log_name):
         log = json.loads(open(log_name,'r').read())
-        return [clean_out_urls(tweet['text']) for tweet in log]
+        return [clean(tweet['text']) for tweet in log]
     else:
         print "No log %s found, returning blank" % (log_name)
         return ""

@@ -6,8 +6,6 @@ from math import log
 import matplotlib.pyplot as pyplot
 import os
 import simplejson as json
-
-
 from pylab import axes, axis
 
 INFERRED_TOPICS_FILE = "inferred-topics.1"

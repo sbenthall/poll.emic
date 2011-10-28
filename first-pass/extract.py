@@ -62,6 +62,8 @@ def parse_json_log(username):
         print "No log %s found, returning blank" % (log_name)
         return ""
 
+CUTOFF = 200
+
 def main():
     if not os.path.exists(DUMP_PATH):
 	    os.makedirs(DUMP_PATH)
@@ -79,8 +81,8 @@ def main():
         else:
             clean_tweets = parse_txt_log(screen_name)
 
-        if len(clean_tweets) < 200:
-            print "%s has fewer than 200 tweets.  Leaving out of sample data."%(screen_name)
+        if len(clean_tweets) < CUTOFF:
+            print "%s has fewer than %d tweets.  Leaving out of sample data."%(screen_name, CUTOFF)
         else:
             for clean_tweet in clean_tweets:
                 print(clean_tweet)

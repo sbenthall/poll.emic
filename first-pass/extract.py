@@ -79,14 +79,17 @@ def main():
         else:
             clean_tweets = parse_txt_log(screen_name)
 
-        for clean_tweet in clean_tweets:
-            print(clean_tweet)
-            try:
-                tweet_file.write(u"twitter %s %s\n" % (screen_name, clean_tweet))
+        if len(clean_tweets) < 200:
+            print "%s has fewer than 200 tweets.  Leaving out of sample data."%(screen_name)
+        else:
+            for clean_tweet in clean_tweets:
+                print(clean_tweet)
+                try:
+                    tweet_file.write(u"twitter %s %s\n" % (screen_name, clean_tweet))
 
-                tweet_file.flush()
-            except:
-                'Error: Exception writing this tweet'
+                    tweet_file.flush()
+                except:
+                    'Error: Exception writing this tweet'
 
     tweet_file.close()
 

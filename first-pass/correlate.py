@@ -52,6 +52,13 @@ def parse_tweets():
 
     return user_matrix
 
+def normalize(dist):
+    total = sum(dist)
+    return dist / total
+
+def entropy(dist):
+    return 0 - sum([p * log(p) for p in normalize(dist)])
+
 def main():
 
     topic_matrix = parse_topics()

@@ -10,7 +10,7 @@ INFERRED_TOPICS_FILE = "inferred-topics.1"
 TOPICS_PATTERN = "(\d*) null-source ([ .\d]*)\n"
 TOPIC_PATTERN = "(\d*) (0\.\d*)"
 
-NUM_TOPICS = 10
+NUM_TOPICS = 100
 
 
 TWEET_DATA_FILE = "sample-data/tweets.txt"

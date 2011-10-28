@@ -28,3 +28,5 @@ first-pass/inferencer.mallet
 first-pass/topic-state.gz
 
 first-pass/sample-data/tweets.txt
+
+first-pass/authtwitter.pyc

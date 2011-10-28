@@ -2,6 +2,7 @@ import re
 from pprint import pprint as pp
 import numpy
 from numpy import array,zeros,ones,dot
+#import matplotlib.pyplot as pyplot
 
 
 INFERRED_TOPICS_FILE = "inferred-topics.1"
@@ -13,7 +14,7 @@ NUM_TOPICS = 10
 
 
 TWEET_DATA_FILE = "sample-data/tweets.txt"
-TWEET_DATA_PATTERN = "twitter (\S*) (.*)"
+TWEET_DATA_PATTERN = "twitter (\S*) (.*)\n"
 
 def parse_topics():
     ''' Returns an M by N array, where M is number of tweets, N is number of topics, and A[m,n] is the value of the m'th topic for the n'th tweet. '''
@@ -58,6 +59,12 @@ def main():
 
     user_matrix = parse_tweets()
     print(user_matrix.shape)
+
+    x_matrix = dot(user_matrix,topic_matrix)
+    print(x_matrix)
+
+    #pyplot.scatter(x_matrix[0,:],x_matrix[1,:])
+
 
 if __name__ == "__main__":
     main()

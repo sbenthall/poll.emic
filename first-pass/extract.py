@@ -31,7 +31,7 @@ def get_screen_names():
 URL_REGEX = "http\://\S*"
 def clean(tweet):
     clean_tweet = re.sub(URL_REGEX, '', tweet)
-    clean_tweet = re.sub("[\n\t]",' ',clean_tweet)
+    clean_tweet = re.sub("[\n\r\t]",' ',clean_tweet)
     #clean out retweet 'RT'
     clean_tweet = re.sub("^RT ",'',clean_tweet)
     return clean_tweet

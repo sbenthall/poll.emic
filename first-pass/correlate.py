@@ -2,7 +2,8 @@ import re
 from pprint import pprint as pp
 import numpy
 from numpy import array,zeros,ones,dot
-#import matplotlib.pyplot as pyplot
+from math import log
+import matplotlib.pyplot as pyplot
 
 
 INFERRED_TOPICS_FILE = "inferred-topics.1"
@@ -68,7 +69,17 @@ def main():
     print(user_matrix.shape)
 
     x_matrix = dot(user_matrix,topic_matrix)
-    print(x_matrix)
+    print(x_matrix.shape)
+
+    entropies = [entropy(x_matrix[i,:]) for i in range(x_matrix.shape[0])]
+
+    print(entropies)
+
+    # the histogram of the data
+    n, bins, patches = pyplot.hist(entropies, 50)
+    print(n, bins, patches)
+    pyplot.title("Entropy Histogram")
+    pyplot.savefig("histogram.png", format='png')
 
     #pyplot.scatter(x_matrix[0,:],x_matrix[1,:])
 

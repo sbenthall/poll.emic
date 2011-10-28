@@ -1,7 +1,22 @@
 This repository is for tools for studying Twitter using probabilistic topic modelling.
 
-Config
-------
+## Setup and usage
+
+To do the 'first pass' experiment,
+
+cd first-pass
+tar -xzf mallet-2.0.6.tar-gz
+
+then run these scripts in the following order:
+
+getsnowball.py
+getLog.py
+extract.py
+mallet.sh
+correlate.py
+
+
+## Config
 
 To properly configure the scripts in the first-pass/ directory, you need to supply a file, config.cfg, with the following contents:
 

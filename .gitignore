@@ -18,3 +18,15 @@ first-pass/config.cfg
 first-pass/snowball-47545000-2.json
 
 first-pass/snowball-47545000-3.json
+
+first-pass/twitter-topic-input.mallet
+
+first-pass/inferred-topics.1
+
+first-pass/inferencer.mallet
+
+first-pass/topic-state.gz
+
+first-pass/sample-data/tweets.txt
+
+first-pass/authtwitter.pyc

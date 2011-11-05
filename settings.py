@@ -22,7 +22,7 @@ FILTER_RANDOM = False
 
 ## GET LOG PARAMETERS
 
-SLEEP = 10
+SLEEP = 5
 LOG_PATH = "log/"
 
 SNOWBALL_PATH = "snowball-%d-%d.json" % (EGO, HOPS)

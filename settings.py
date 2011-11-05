@@ -33,4 +33,4 @@ SNOWBALL_PATH = "snowball-%d-%d.json" % (EGO, HOPS)
 DUMP_PATH = "sample-data/"
 DUMP_FILE = "sample-data/tweets.txt"
 
-JSON_LOG = True
+CUTOFF = 200

@@ -11,7 +11,6 @@ if len(sys.argv) > 1:
 
 def get_screen_names():
     snowball = load_snowball()
-    pp(snowball)
     return [m['screen_name'] for m in snowball.values() if m.has_key('screen_name')]
 
 
@@ -23,23 +22,6 @@ def clean(tweet):
     clean_tweet = re.sub("^RT ",'',clean_tweet)
     return clean_tweet
 
-
-def get_txt_log(username):    
-    log_path = "%s%s.txt"%(LOG_PATH,username) 
-    if os.path.isfile(log_name):
-        log = open(log_name,'r')
-        return log.read()    
-    else:
-        print "No log %s found, returning blank" % (log_name)
-        return ""
-
-TWEET_PATTERN = "(\w*) (\d*)\nDate\: (.*)\n\n    (.*)\n"
-def parse_txt_log(username):    
-    log = get_txt_log(username)
-    matches = re.findall(TWEET_PATTERN, log)
-
-    return [clean(tweet) for (name,number,date,tweet) in matches]
-
 def parse_json_log(username):
     log_name = "%s%s.json"%(LOG_PATH,username) 
     if os.path.isfile(log_name):
@@ -49,12 +31,12 @@ def parse_json_log(username):
         print "No log %s found, returning blank" % (log_name)
         return ""
 
-CUTOFF = 200
+
+if not os.path.exists(DUMP_PATH):
+    os.makedirs(DUMP_PATH)
+
 
 def main():
-    if not os.path.exists(DUMP_PATH):
-	    os.makedirs(DUMP_PATH)
-
     # w+ create file if it doesn't exist, but overwrite if it does    
     tweet_file = open("%s" % (DUMP_FILE),'w+')
 
@@ -63,10 +45,7 @@ def main():
     for screen_name in screen_names:
 
         clean_tweets = []
-        if JSON_LOG:
-            clean_tweets = parse_json_log(screen_name)
-        else:
-            clean_tweets = parse_txt_log(screen_name)
+        clean_tweets = parse_json_log(screen_name)
 
         if len(clean_tweets) < CUTOFF:
             print "%s has fewer than %d tweets.  Leaving out of sample data."%(screen_name, CUTOFF)

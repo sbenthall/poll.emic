@@ -134,7 +134,7 @@ def get_snowball_s(start, hops, mutual):
             #print "user_id: ", user_id
             if user_id not in snowball_set:
                 # call lookup would only look at cache since lookupMulti called in advance
-                metadata = lookup(user_id)
+                metadata = get_cached_metadata(user_id)
                 snowball_set[user_id] = metadata
                 
                 if h == hops-1:

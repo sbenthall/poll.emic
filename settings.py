@@ -2,10 +2,10 @@
 ## GET SNOWBALL PARAMETERS
 
 # User ID of the 'ego' of the snowball
-EGO = 47545000
+EGO = 14437549
 
 #Number of hops for snowball collection
-HOPS = 4
+HOPS = 3
 
 
 CONNECTION_NO = 20

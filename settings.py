@@ -18,3 +18,11 @@ FOLLOWERS_PATH = "accounts/followers/"
 #when filter followers, true: pick randomly,
  #false: pick from beginning
 FILTER_RANDOM = False 
+
+
+## GET LOG PARAMETERS
+
+SLEEP = 10
+LOG_PATH = "log/"
+
+SNOWBALL_PATH = "snowball-%d-%d.json" % (EGO, HOPS)

@@ -112,41 +112,6 @@ def filter(users):
             for counter in range(CONNECTION_NO):
                 filtered_users.add(users[counter])
             return filtered_users
-    
-def get_snowball(start, hops, mutual=False):
-    snowball = {} # dictionary of (id, metadata) pairs
-    to_crawl = set([start]) # set of user ids
-    crawled = set()
-
-    for h in range(hops):
-        for user_id in to_crawl:
-            if user_id not in crawled:
-                new_users = get_friends(user_id)
-                metadata = lookup(user_id)                
-                
-                if user not in snowball:
-                    snowball[user] = lookup(user)
-
-                if metadata['followers_count'] < THROTTLE:
-                    followers = get_followers(user_id)
-                
-                    if mutual:
-                        #take intersection
-                        new_users = [user for user in users_to_add if user in followers]
-                    else:
-                        #make union
-                        new_users.extend(followers)
-
-                        for new_user in new_users:
-                            to_crawl.add(new_user)
-                
-                to_crawl.remove(user_id)
-                crawled.add(user_id)
-
-                
-    return snowball
-
-
 
 def get_snowball_s(start, hops, mutual):
     logger.info("*** snowball starts!!!")
@@ -170,10 +135,6 @@ def get_snowball_s(start, hops, mutual):
                 
                 if h == hops-1:
                     pass #final hop, skip collecting freinds and followers
-                    
-                #elif metadata['followers_count'] > THROTTLE:
-                #    print "followers exceed ", THROTTLE, ", skipped"
-                
                 else:
                     #look into each user's f&f
                     #related_users is a set of accounts that connect to user_id

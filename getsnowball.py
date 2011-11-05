@@ -67,7 +67,11 @@ def get_friends(user_id):
         return set(json.loads(file.read()))
     else:
         try:
-            friends = twitter.friends.ids(user_id=user_id)
+            #watch out, new API change includes cursor info
+            #by default
+            friends_response = twitter.friends.ids(user_id=user_id)
+            friends = friends_response['ids']
+            print(friends_response)
             logger.debug("id: %s \n friends: %s ", user_id, friends)
             file = open("%s%s.json" % (FRIENDS_PATH, user_id), 'w')
             file.write(json.dumps(friends))
@@ -83,7 +87,8 @@ def get_followers(user_id):
         return set(json.loads(file.read()))
     else:
         try:
-            followers = twitter.followers.ids(user_id=user_id)
+            followers_response = twitter.followers.ids(user_id=user_id)
+            followers = followers_response['ids']
             logger.debug("id: %s \n followers: %s ", user_id, followers)
             file = open("%s%s.json" % (FOLLOWERS_PATH, user_id), 'w')
             file.write(json.dumps(followers))

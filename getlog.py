@@ -19,9 +19,6 @@ def load_snowball():
     else:
         print "error"
 
-
-snowball = load_snowball()
-
 def use_statuses_api(screen_name):
     log_path = "%s%s.json" % (LOG_PATH, screen_name)
 
@@ -54,6 +51,9 @@ def use_statuses_api(screen_name):
     call_api(screen_name,sleep_exp)
         
 
+
+
+snowball = load_snowball()
 
 for u_id, metadata in snowball.items():
     #print "crawling: ", line

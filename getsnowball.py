@@ -29,9 +29,22 @@ if not os.path.exists(FRIENDS_PATH):
     os.makedirs(METADATA_PATH)
 
 
-def get_cached_metadata(user_id):
-    file = open("%s%s.json" % (METADATA_PATH, user_id))
-    return json.loads(file.read())
+def lookup(user_id):
+    # return user's metadata information
+    if os.path.isfile("%s%s.json" % (METADATA_PATH, user_id)):
+        logger.debug("id: %s exists in cache." % user_id)
+        file = open("%s%s.json" % (METADATA_PATH, user_id))
+        return json.loads(file.read())
+    else:
+        logger.debug("id: %s does not exists in cache. Will retrieve it from web." % user_id)
+        try:
+            metadata = twitter.users.lookup(user_id=user_id)[0]
+            file = open("%s%s.json" % (METADATA_PATH, user_id), 'w')
+            file.write(json.dumps(metadata))
+        except TwitterHTTPError as e:
+            print e
+            logger.error(e)
+            return {'followers_count': THROTTLE+1} #hack to prevent crawling this 
 
 def lookupMulti(user_ids):
     
@@ -134,7 +147,7 @@ def get_snowball_s(start, hops, mutual):
             #print "user_id: ", user_id
             if user_id not in snowball_set:
                 # call lookup would only look at cache since lookupMulti called in advance
-                metadata = get_cached_metadata(user_id)
+                metadata = lookup(user_id)
                 snowball_set[user_id] = metadata
                 
                 if h == hops-1:

@@ -34,3 +34,15 @@ DUMP_PATH = "sample-data/"
 DUMP_FILE = "sample-data/tweets.txt"
 
 CUTOFF = 200
+
+
+## INFER TOPICS PARAMETERS
+
+MALLET_INPUT_FILE = "input.mallet"
+INFERENCER_FILE = "inferencer.mallet"
+OUTPUT_STATE = "topic-state.gz"
+INFERRED_FILE = "inferred-topics.txt"
+
+
+NUM_TOPICS = 10
+OPTIMIZE_INTERVAL = 200

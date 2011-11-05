@@ -9,3 +9,10 @@ def load_snowball():
         return snowball
     else:
         print "error"
+
+
+def get_followers_count(username):
+    log_name = "%s%s.json"%(LOG_PATH,username) 
+    if os.path.isfile(log_name):
+        log = json.loads(open(log_name,'r').read())
+        return log[0]['user']['followers_count']

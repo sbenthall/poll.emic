@@ -1,4 +1,6 @@
 import re
+from settings import *
+from utils import get_followers_count
 from pprint import pprint as pp
 import numpy
 from numpy import array,zeros,ones,dot
@@ -8,23 +10,16 @@ import os
 import simplejson as json
 from pylab import axes, axis
 
-INFERRED_TOPICS_FILE = "inferred-topics.1"
-
 TOPICS_PATTERN = "(\d*) null-source ([ .\d]*)\n"
 TOPIC_PATTERN = "(\d*) (0\.\d*)"
-
-NUM_TOPICS = 100
-
 
 TWEET_DATA_FILE = "sample-data/tweets.txt"
 TWEET_DATA_PATTERN = "twitter (\S*) (.*)\n"
 
-LOG_PATH = "log/"
-
 def parse_topics():
     ''' Returns an M by N array, where M is number of tweets, N is number of topics, and A[m,n] is the value of the m'th topic for the n'th tweet. '''
 
-    inferred_topics_string = open(INFERRED_TOPICS_FILE,'r').read()
+    inferred_topics_string = open(INFERRED_FILE,'r').read()
     matches = re.findall(TOPICS_PATTERN, inferred_topics_string)
 
     topic_data = zeros((len(matches),NUM_TOPICS))
@@ -58,13 +53,6 @@ def parse_tweets():
 
 
     return user_matrix, indexed_usernames
-
-def get_followers(username):
-    # CODE DUPLICATED FROM extract.py NEEDS REFACTORING!!!!
-    log_name = "%s%s.json"%(LOG_PATH,username) 
-    if os.path.isfile(log_name):
-        log = json.loads(open(log_name,'r').read())
-        return log[0]['user']['followers_count']
     
 def normalize(dist):
     total = sum(dist)
@@ -94,7 +82,7 @@ def main():
     pyplot.title("Entropy Histogram")
     pyplot.savefig("entropy_histogram.png", format='png')
 
-    followers = array([get_followers(username) for username in indexed_usernames])
+    followers = array([get_followers_count(username) for username in indexed_usernames])
     print(followers)
     n, bins, patches = pyplot.hist(followers,50)
     pyplot.title("Followers Histogram")
@@ -102,7 +90,7 @@ def main():
 
     axes(yscale='log')
     #should make the axis scale change with the _variance_ of data
-    axis([min(entropies)*0.99, max(entropies)*1.01, min(followers)*0.9, max(followers)*1.1])
+    axis([min(entropies), max(entropies), min(followers)*0.9, max(followers)*1.1])
     pyplot.plot(entropies,followers,'bo')
     pyplot.title('Entropy vs. Followers')
     pyplot.savefig("ef_plot.png", format='png')

@@ -23,8 +23,8 @@ def infer_topics():
     cmd = MALLET + "infer-topics "
     cmd += "--input %s " % (MALLET_INPUT_FILE)
     cmd += "--inferencer %s " % (INFERENCER_FILE)
-    cmd += "--output-doc-topics %s " % (INFERRED_FILE)
-
+    cmd += "--output-doc-topics %s" % (INFERRED_FILE)
+    os.system(cmd)
 
 
 import_file()

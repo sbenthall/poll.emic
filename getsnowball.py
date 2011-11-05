@@ -5,6 +5,7 @@ import simplejson as json
 import logging
 import os
 import random
+from settings import *
 from authtwitter import twitter
 
 logger = logging.getLogger('getsnowball')
@@ -15,13 +16,6 @@ hdlr.setFormatter(formatter)
 logger.addHandler(hdlr) 
 logger.setLevel(logging.DEBUG)
 
-THROTTLE = 1000
-CONNECTION_NO = 20
-METADATA_PATH = "accounts/metadata/"
-FRIENDS_PATH = "accounts/friends/"
-FOLLOWERS_PATH = "accounts/followers/"
-FILTER_RANDOM = False   #when filter followers, true: pick randomly,
-                        #false: pick from beginning
 
 def lookup(user_id):
     # return user's metadata information
@@ -203,10 +197,6 @@ def get_snowball_s(start, hops, mutual):
         print "to_crawl: ", len(to_crawl)
 
     return snowball_set
-
-EGO = 47545000
-HOPS = 4
-
 
 snowball = get_snowball_s(EGO, HOPS, False)
 

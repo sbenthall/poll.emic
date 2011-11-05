@@ -3,24 +3,11 @@ import os
 import sys
 from pprint import pprint as pp
 import simplejson as json
+from settings import *
+from utils import *
 
-LOG_PATH = "log/"
-DUMP_PATH = "sample-data/"
-DUMP_FILE = "sample-data/tweets.txt"
-
-JSON_LOG = True
-
-SNOWBALL_PATH = "snowball-47545000-3.json"
 if len(sys.argv) > 1:
     SNOWBALL_PATH = sys.argv[1]
-
-def load_snowball():
-    if os.path.isfile("%s" % (SNOWBALL_PATH)):
-        snowball_file = open("%s" % (SNOWBALL_PATH),'r')
-        snowball = json.loads(snowball_file.read())
-        return snowball
-    else:
-        print "error"
 
 def get_screen_names():
     snowball = load_snowball()

@@ -6,18 +6,10 @@ from authtwitter import twitter
 from twitter import TwitterHTTPError
 import time
 from settings import *
-
+from utils import *
 
 if not os.path.exists(LOG_PATH):
     os.makedirs(LOG_PATH)
-
-def load_snowball():
-    if os.path.isfile("%s" % (SNOWBALL_PATH)):
-        snowball_file = open("%s" % (SNOWBALL_PATH),'r')
-        snowball = json.loads(snowball_file.read())
-        return snowball
-    else:
-        print "error"
 
 def use_statuses_api(screen_name):
     log_path = "%s%s.json" % (LOG_PATH, screen_name)

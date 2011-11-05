@@ -26,3 +26,11 @@ SLEEP = 5
 LOG_PATH = "log/"
 
 SNOWBALL_PATH = "snowball-%d-%d.json" % (EGO, HOPS)
+
+
+## EXTRACT PARAMETERS
+
+DUMP_PATH = "sample-data/"
+DUMP_FILE = "sample-data/tweets.txt"
+
+JSON_LOG = True

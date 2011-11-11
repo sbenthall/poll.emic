@@ -47,29 +47,35 @@ def lookup(user_id):
             return {'followers_count': THROTTLE+1} #hack to prevent crawling this 
 
 def lookupMulti(user_ids):
+    if len(user_ids) > 100:
+        s = set()
+        while len(user_ids) > 0:
+            if len(s) == 100:
+                lookupMulti(s)
+                s = set()
+            s.add(user_ids.pop())
+    else:
+        new_ids = set()
+        for id in user_ids:
+            if not os.path.isfile("%s%s.json" % (METADATA_PATH, id)):
+                new_ids.add(id)
     
-    new_ids = set()
-    for id in user_ids:
-        if not os.path.isfile("%s%s.json" % (METADATA_PATH, id)):
-            new_ids.add(id)
+        print "new ID: ", new_ids
+        logger.debug("new ID: %s", new_ids)
     
-    print "new ID: ", new_ids
-    logger.debug("new ID: %s", new_ids)
-    
-    if len(new_ids) > 0:
-        query = ",".join([str(x) for x in new_ids])
-        logger.debug(query)
-        try:
-            metadatas = twitter.users.lookup(user_id=query)
-            for user in metadatas:
-                logger.debug(user)
-                file = open('%s%s.json'%(METADATA_PATH,user['id']),'w')
-                file.write(json.dumps(user))
-    
-        except TwitterHTTPError as e:
-            print e
-            logger.error(e)   
-        
+        if len(new_ids) > 0:
+            query = ",".join([str(x) for x in new_ids])
+            logger.debug(query)
+            try:
+                metadatas = twitter.users.lookup(user_id=query)
+                for user in metadatas:
+                    logger.debug(user)
+                    file = open('%s%s.json'%(METADATA_PATH,user['id']),'w')
+                    file.write(json.dumps(user))
+
+            except TwitterHTTPError as e:
+                print e
+                logger.error(e)
 
 API_URL = "http://api.twitter.com/1/"
 

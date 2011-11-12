@@ -7,6 +7,7 @@ import os
 import random
 from settings import *
 from authtwitter import twitter
+from utils import *
 
 logger = logging.getLogger('getsnowball')
 #todo: use date/time as the log file name
@@ -38,7 +39,8 @@ def lookup(user_id):
     else:
         logger.debug("id: %s does not exists in cache. Will retrieve it from web." % user_id)
         try:
-            metadata = twitter.users.lookup(user_id=user_id)[0]
+            metadata = call_api(twitter.users.lookup,
+                                {'user_id':user_id})[0]
             file = open("%s%s.json" % (METADATA_PATH, user_id), 'w')
             file.write(json.dumps(metadata))
         except TwitterHTTPError as e:
@@ -67,7 +69,8 @@ def lookupMulti(user_ids):
             query = ",".join([str(x) for x in new_ids])
             logger.debug(query)
             try:
-                metadatas = twitter.users.lookup(user_id=query)
+                metadatas = call_api(twitter.users.lookup,
+                                     {'user_id':query})
                 for user in metadatas:
                     logger.debug(user)
                     file = open('%s%s.json'%(METADATA_PATH,user['id']),'w')
@@ -88,7 +91,8 @@ def get_friends(user_id):
         try:
             #watch out, new API change includes cursor info
             #by default
-            friends_response = twitter.friends.ids(user_id=user_id)
+            friends_response = call_api(twitter.friends.ids,
+                                        {'user_id':user_id})
             friends = friends_response['ids']
             print(friends_response)
             logger.debug("id: %s \n friends: %s ", user_id, friends)
@@ -106,7 +110,8 @@ def get_followers(user_id):
         return set(json.loads(file.read()))
     else:
         try:
-            followers_response = twitter.followers.ids(user_id=user_id)
+            followers_response = call_api(twitter.followers.ids,
+                                          {'user_id':user_id})
             followers = followers_response['ids']
             logger.debug("id: %s \n followers: %s ", user_id, followers)
             file = open("%s%s.json" % (FOLLOWERS_PATH, user_id), 'w')

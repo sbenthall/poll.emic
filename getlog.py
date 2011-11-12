@@ -18,31 +18,18 @@ def use_statuses_api(screen_name):
         print "File %s already exists, not overwriting" % (log_path)
         return
 
-    #helper method needed for exponential dropoff
-    def call_api(screen_name, sleep_exp):
-        try:
-            tweets = twitter.statuses.user_timeline(screen_name=screen_name,count=200,include_rts=1)
-            pp("Collected tweets for "+ screen_name)
-            file = open(log_path, 'w')
-            file.write(json.dumps(tweets))
-            time.sleep(SLEEP)
-        except TwitterHTTPError as e:
-            if e.e.code == 502:
-                #if breaks due to twitter overload error,
-                #back off exponentially
-                #as per twitter doc recommendation
-                print("Error 502 for %s. Will sleep with factor %d" % (screen_name,sleep_exp))
-                time.sleep(SLEEP ** sleep_exp)
-                sleep_exp += 1
-                call_api(screen_name,sleep_exp)
-            else:
-                print(e) 
-                time.sleep(SLEEP)
-
-    sleep_exp = 1
-    call_api(screen_name,sleep_exp)
-        
-
+    try:
+        tweets = call_api(twitter.statuses.user_timeline,
+                          {'screen_name': screen_name,
+                           'count': 200,
+                           'include_rts': 1
+                           })
+        pp("Collected tweets for "+ screen_name)
+        file = open(log_path, 'w')
+        file.write(json.dumps(tweets))
+    except TwitterHTTPError as e:
+        print("Exception raised for %s.  Continuing." % (screen_name))
+        time.sleep(SLEEP)
 
 
 snowball = load_snowball()

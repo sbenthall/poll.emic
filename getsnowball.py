@@ -60,7 +60,7 @@ def lookupMulti(user_ids):
         s = set()
         while len(user_ids) > 0:
             if len(s) == 100:
-                print("Looking up subset")
+                print("Looking up subset, %d to go" % len(user_ids))
                 lookupMulti(s)
                 s = set()
             s.add(user_ids.pop())

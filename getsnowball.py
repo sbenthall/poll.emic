@@ -52,7 +52,8 @@ def lookup(user_id):
         except TwitterHTTPError as e:
             print e
             logger.error(e)
-            return {'followers_count': THROTTLE+1} #hack to prevent crawling this 
+            #hack to prevent crawling this
+            return {'followers_count': 0, 'error': e}
 
 def lookupMulti(user_ids):
     if len(user_ids) > 100:

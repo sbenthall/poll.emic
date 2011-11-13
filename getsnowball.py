@@ -24,10 +24,10 @@ if not os.path.exists(METADATA_PATH):
 
 
 if not os.path.exists(FRIENDS_PATH):
-    os.makedirs(METADATA_PATH)
+    os.makedirs(FRIENDS_PATH)
 
-if not os.path.exists(FRIENDS_PATH):
-    os.makedirs(METADATA_PATH)
+if not os.path.exists(FOLLOWERS_PATH):
+    os.makedirs(FOLLOWERS_PATH)
 
 
 def lookup(user_id):

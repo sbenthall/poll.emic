@@ -48,6 +48,7 @@ def lookup(user_id):
                                 {'user_id':user_id})[0]
             file = open("%s%s.json" % (METADATA_PATH, user_id), 'w')
             file.write(json.dumps(metadata))
+            return metadata
         except TwitterHTTPError as e:
             print e
             logger.error(e)

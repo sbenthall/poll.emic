@@ -55,9 +55,11 @@ def lookup(user_id):
 
 def lookupMulti(user_ids):
     if len(user_ids) > 100:
+        print("Attempting lookup on %d, paring down." % len(user_ids))
         s = set()
         while len(user_ids) > 0:
             if len(s) == 100:
+                print("Looking up subset")
                 lookupMulti(s)
                 s = set()
             s.add(user_ids.pop())

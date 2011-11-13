@@ -161,7 +161,9 @@ def get_snowball_s(start, hops, mutual):
         all_related_users = set()
         
         # batch lookup users and cache into file
-        lookupMulti(to_crawl)
+        # for performance reasons, lookupMulti mutates input
+        # so copy before lookup
+        lookupMulti(set(to_crawl))
         
         for user_id in to_crawl:
             #print "user_id: ", user_id

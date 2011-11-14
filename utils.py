@@ -25,7 +25,7 @@ def call_api(method,arguments,sleep_exp=1):
         s = SLEEP ** sleep_exp
         print("Sleeping for %d" % s)
         time.sleep(s)
-        call_api(method,arguments,sleep_exp + 1)
+        return call_api(method,arguments,sleep_exp + 1)
 
     try:
         r = method(**arguments)
@@ -41,7 +41,7 @@ def call_api(method,arguments,sleep_exp=1):
                 # something is wrong with request
                 raise e
             else:
-                call_again()
+                return call_again()
         elif code == 401: # Unauthorized
             raise e
         elif code == 403: # Forbidden due to update limits
@@ -51,12 +51,12 @@ def call_api(method,arguments,sleep_exp=1):
         elif code == 406: # Invalid format for search request
             raise e
         elif code == 420: # Search or Trends API rate limited
-            call_again()
+            return call_again()
         elif code == 500: # 'Something is broken'
             raise e
         elif code == 502: # Twitter is down or being upgraded
-            call_again()
+            return call_again()
         elif code == 503:
-            call_again()
+            return call_again()
         else:
             raise e

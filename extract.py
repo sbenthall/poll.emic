@@ -44,6 +44,7 @@ def main():
     
     for screen_name in screen_names:
 
+        print("Parsing tweets for %s" % screen_name)
         clean_tweets = []
         clean_tweets = parse_json_log(screen_name)
 

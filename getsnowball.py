@@ -121,6 +121,7 @@ def get_followers(user_id):
         try:
             followers_response = call_api(twitter.followers.ids,
                                           {'user_id':user_id})
+            logger.debug("id: %s \n followers response: %s "% (user_id, followers_response))
             followers = followers_response['ids']
             logger.debug("id: %s \n followers: %s ", user_id, followers)
             file = open("%s%s.json" % (FOLLOWERS_PATH, user_id), 'w')
@@ -164,7 +165,7 @@ def get_snowball_s(start, hops, mutual):
         # for performance reasons, lookupMulti mutates input
         # so copy before lookup
         lookupMulti(set(to_crawl))
-        
+        print 'after lookupMulti, to_crawl is ', to_crawl
         for user_id in to_crawl:
             #print "user_id: ", user_id
             if user_id not in snowball_set:
@@ -191,7 +192,7 @@ def get_snowball_s(start, hops, mutual):
                     #append all related users of each user_id in to_crawl into one big set
                     all_related_users = all_related_users.union( related_users )
             
-        #print "all_related_users: ", all_related_users
+        print "all_related_users: ", all_related_users
         #clean up to_crawl, add all_related_users to to_crawl, except those already in snowball_set
         to_crawl = all_related_users.difference(snowball_set)
         print "to_crawl: ", len(to_crawl)

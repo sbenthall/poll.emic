@@ -23,7 +23,7 @@ def get_followers_count(username):
 def call_api(method,arguments,sleep_exp=1):
     def call_again():
         s = SLEEP ** sleep_exp
-        print("Sleeping for %d" % s)
+        print("Sleeping for %d at %s" % (s, time.strftime('%X %x')))
         time.sleep(s)
         return call_api(method,arguments,sleep_exp + 1)
 

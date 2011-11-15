@@ -174,16 +174,16 @@ def get_snowball_s(start, hops, mutual):
                 snowball_set[user_id] = metadata
                 
                 if h == hops-1:
-                    pass #final hop, skip collecting freinds and followers
+                    pass #final hop, skip collecting friends and followers
                 else:
                     #look into each user's f&f
                     #related_users is a set of accounts that connect to user_id
                     if mutual:
                         #take intersection
-                        related_users = filter(get_friends(user_id)).intersection( filter(get_followers(user_id)) )
+                        related_users = filter(get_friends(user_id).intersection( get_followers(user_id)))
                     else:
                         #make union
-                        related_users = filter(get_friends(user_id)).union( filter(get_followers(user_id)) )
+                        related_users = filter(get_friends(user_id).union( get_followers(user_id)))
                     
                     print "related_users: ", related_users
                     logger.info("no. of related users: %i", len(related_users))

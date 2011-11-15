@@ -90,7 +90,7 @@ def main():
 
     axes(yscale='log')
     #should make the axis scale change with the _variance_ of data
-    axis([min(entropies), max(entropies), min(followers)*0.9, max(followers)*1.1])
+    axis([min(entropies), max(entropies), 0, max(followers)*1.1])
     pyplot.plot(entropies,followers,'bo')
     pyplot.title('Entropy vs. Followers')
     pyplot.savefig("ef_plot.png", format='png')

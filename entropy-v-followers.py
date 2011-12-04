@@ -12,11 +12,8 @@ from pylab import axes, axis
 
 
 user_tweet_matrix = numpy.load('user_tweet_matrix.npy')
-
 user_metadata_matrix = numpy.load('user_metadata_matrix.npy')
-
 tweet_topic_matrix = numpy.load('tweet_topic_matrix.npy')
-
 user_topic_matrix = numpy.load('user_topic_matrix.npy')
 
     
@@ -50,7 +47,7 @@ def main():
     axis([min(entropies), max(entropies), 0, max(followers)*1.1])
     pyplot.plot(entropies,followers,'bo')
     pyplot.title('Entropy vs. Followers')
-    pyplot.savefig("ef_plot.png", format='png')
+    pyplot.savefig("entropy_followers_plot.png", format='png')
 
 if __name__ == "__main__":
     main()

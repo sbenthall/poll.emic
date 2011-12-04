@@ -88,9 +88,9 @@ def main():
     numpy.save('tweet_topic_matrix',tweet_topic_matrix)
     print "Saved tweet_topic_matrix"
 
-    user_topics_matrix = dot(user_tweet_matrix,topic_matrix)
-    numpy.save('user_topics_matrix',user_topics_matrix)
-    print "Saved user_topics_matrix"
+    user_topic_matrix = dot(user_tweet_matrix,tweet_topic_matrix)
+    numpy.save('user_topic_matrix',user_topic_matrix)
+    print "Saved user_topic_matrix"
 
 if __name__ == "__main__":
     main()

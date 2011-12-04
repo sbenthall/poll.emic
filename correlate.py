@@ -10,49 +10,15 @@ import os
 import simplejson as json
 from pylab import axes, axis
 
-TOPICS_PATTERN = "(\d*) null-source ([ .\d]*)\n"
-TOPIC_PATTERN = "(\d*) (0\.\d*)"
 
-TWEET_DATA_FILE = "sample-data/tweets.txt"
-TWEET_DATA_PATTERN = "twitter (\S*) (.*)\n"
+user_tweet_matrix = numpy.load('user_tweet_matrix.npy')
 
-def parse_topics():
-    ''' Returns an M by N array, where M is number of tweets, N is number of topics, and A[m,n] is the value of the m'th topic for the n'th tweet. '''
+user_metadata_matrix = numpy.load('user_metadata_matrix.npy')
 
-    inferred_topics_string = open(INFERRED_FILE,'r').read()
-    matches = re.findall(TOPICS_PATTERN, inferred_topics_string)
+tweet_topic_matrix = numpy.load('tweet_topic_matrix.npy')
 
-    topic_data = zeros((len(matches),NUM_TOPICS))
+user_topic_matrix = numpy.load('user_topic_matrix.npy')
 
-    for index,topics in matches:
-        tm = re.findall(TOPIC_PATTERN,topics)
-
-        for topic, value in tm:
-            topic_data[int(index),int(topic)] = float(value)
-
-    return topic_data
-
-def parse_tweets():
-    tweet_file = open(TWEET_DATA_FILE,'r')
-    matches = re.findall(TWEET_DATA_PATTERN, tweet_file.read())
-
-    user_tweets = {}
-
-    for tweet_index, (username,tweet) in enumerate(matches):
-        tweets = user_tweets.get(username,[])
-        tweets.append(tweet_index)
-        user_tweets[username] = tweets
-
-    user_matrix = zeros((len(user_tweets),len(matches)))
-
-    indexed_usernames = []
-    for user_index, (username,tweets) in enumerate(user_tweets.items()):
-        indexed_usernames.append(username)
-        for tweet_index in tweets:
-            user_matrix[user_index,tweet_index] = 1
-
-
-    return user_matrix, indexed_usernames
     
 def normalize(dist):
     total = sum(dist)
@@ -63,16 +29,7 @@ def entropy(dist):
 
 def main():
 
-    topic_matrix = parse_topics()
-    print(topic_matrix.shape)
-
-    user_matrix, indexed_usernames = parse_tweets()
-    print(user_matrix.shape)
-
-    x_matrix = dot(user_matrix,topic_matrix)
-    print(x_matrix.shape)
-
-    entropies = [entropy(x_matrix[i,:]) for i in range(x_matrix.shape[0])]
+    entropies = [entropy(user_topic_matrix[i,:]) for i in range(user_topic_matrix.shape[0])]
 
     print(entropies)
 
@@ -82,7 +39,7 @@ def main():
     pyplot.title("Entropy Histogram")
     pyplot.savefig("entropy_histogram.png", format='png')
 
-    followers = array([get_followers_count(username) for username in indexed_usernames])
+    followers = user_metadata_matrix[:,0]
     print(followers)
     n, bins, patches = pyplot.hist(followers,50)
     pyplot.title("Followers Histogram")

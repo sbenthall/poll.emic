@@ -37,3 +37,7 @@ first-pass/authtwitter.pyc
 /followers_histogram.png
 /entropy_followers_plot.png
 /entropy_histogram.png
+
+settings.pyc
+
+utils.pyc

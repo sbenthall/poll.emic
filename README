@@ -12,8 +12,10 @@ then run these scripts in the following order:
 getsnowball.py
 getLog.py
 extract.py
-mallet.sh
-correlate.py
+infertopics.py
+preparedata.py
+
+then use the analysis scripts, or write your own
 
 
 ## Config

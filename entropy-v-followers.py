@@ -11,9 +11,7 @@ import simplejson as json
 from pylab import axes, axis
 
 
-user_tweet_matrix = numpy.load('user_tweet_matrix.npy')
 user_metadata_matrix = numpy.load('user_metadata_matrix.npy')
-tweet_topic_matrix = numpy.load('tweet_topic_matrix.npy')
 user_topic_matrix = numpy.load('user_topic_matrix.npy')
 
     

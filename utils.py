@@ -60,3 +60,9 @@ def call_api(method,arguments,sleep_exp=1):
             return call_again()
         else:
             raise e
+
+
+
+def normalize(dist):
+    total = sum(dist)
+    return dist / total

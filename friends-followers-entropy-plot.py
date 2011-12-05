@@ -31,14 +31,14 @@ def main():
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
 
-    ax.scatter(friends,followers,entropies)
+    ax.scatter(followers,friends,entropies)
 
     ax.set_xlabel('Followers')
     ax.set_ylabel('Friends')
     ax.set_zlabel('Entropy')
 
     plt.title('Followers vs. Friends vs. Entropy')
-    plt.savefig("followers_friends_plot.png", format='png')
+    plt.savefig("followers_friends_entropy_plot.png", format='png')
 
 if __name__ == "__main__":
     main()

@@ -17,6 +17,9 @@ def train_topics():
     cmd += "--num-topics %d " % (NUM_TOPICS)
     cmd += "--output-state %s " % (OUTPUT_STATE)
     cmd += "--optimize-interval %d " % (OPTIMIZE_INTERVAL)
+    cmd += "--output-topic-keys %s " % (TOPIC_KEYS_FILE)
+    cmd += "--num-top-words %d " % (NUM_TOP_WORDS)
+
     os.system(cmd)
 
 def infer_topics():

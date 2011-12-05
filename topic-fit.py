@@ -10,6 +10,12 @@ import os
 import simplejson as json
 from pylab import axes, axis
 from mpl_toolkits.mplot3d import Axes3D
+from operator import itemgetter
+
+TOPIC_PATH = 'topic-keys.txt'
+SORTED_FOLLOWER_TOPIC_PATH = 'topic-follower-sorted.txt'
+SORTED_FRIEND_TOPIC_PATH = 'topic-friend-sorted.txt'
+TOPIC_PATTERN = "(\d*)\s*(0[.]\d*)\s(.*)\n"
 
 user_metadata_matrix = numpy.load('user_metadata_matrix.npy')
 user_topic_matrix = numpy.load('user_topic_matrix.npy')
@@ -22,4 +28,42 @@ plt.plot(weights[:,0],weights[:,1],'bo')
 plt.title('Followers Weight vs. Friend Weight')
 plt.savefig("n_weights_plot.png", format='png')
 
-print numpy.find(weights[:,0]>50)
+#import topics file to dict
+topics = open(TOPIC_PATH)
+topic_dict = dict()
+
+for line in topics.readlines():
+    #print line
+    topic = re.findall(TOPIC_PATTERN, line)
+    for index, value, terms in topic:
+        topic_dict[index] = terms
+
+#get sorted follower
+sorted_follower = sorted(enumerate(weights[:,0]), key=itemgetter(1))
+sorted_follower.reverse()
+print sorted_follower[0:24]
+follower_least25 = sorted_follower[len(sorted_follower)-24:len(sorted_follower)]
+follower_least25.reverse()
+print follower_least25
+    
+#write sorted follower    
+sorted_follower_topics = open(SORTED_FOLLOWER_TOPIC_PATH, 'w')
+
+for index, topic in enumerate(sorted_follower):
+    print index, '\t', topic[0], '\t', topic_dict.get(str(topic[0]))
+    sorted_follower_topics.write("%d\t%d\t%s\n" % (index, topic[0], topic_dict.get(str(topic[0]))))
+
+#get sorted friend
+sorted_friend = sorted(enumerate(weights[:,1]), key=itemgetter(1))
+sorted_friend.reverse()
+print sorted_friend[0:24]
+friend_least25 = sorted_friend[len(sorted_friend)-24:len(sorted_friend)]
+friend_least25.reverse()
+print friend_least25
+
+#write sorted friend   
+sorted_friend_topics = open(SORTED_FRIEND_TOPIC_PATH, 'w')
+
+for index, topic in enumerate(sorted_friend):
+    print index, '\t', topic[0], '\t', topic_dict.get(str(topic[0]))
+    sorted_friend_topics.write("%d\t%d\t%s\n" % (index, topic[0], topic_dict.get(str(topic[0]))))

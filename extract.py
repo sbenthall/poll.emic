@@ -21,6 +21,13 @@ def clean(tweet):
     #clean out retweet 'RT'
     clean_tweet = re.sub("^RT ",'',clean_tweet)
 
+    #remove usernames
+    clean_tweet = re.sub("@(\w*)",'',clean_tweet)
+    
+    clean_tweet = re.sub("'ll",'ll',clean_tweet)
+    clean_tweet = re.sub("'ve",'ve',clean_tweet)
+    clean_tweet = re.sub("'t",'t',clean_tweet)
+
     if AGGREGATE_TWEETS:
         try:
             clean_tweet.decode('ascii')

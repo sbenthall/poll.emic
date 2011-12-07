@@ -41,7 +41,7 @@ for line in topics.readlines():
         topic_dict[index] = terms
 
 
-#write sorted entropy
+#write sorted use
 sorted_usage = sorted(enumerate(topic_usage), key=itemgetter(1))
 
 sorted_usage_file = open(SORTED_USAGE_TOPIC_PATH, 'w')

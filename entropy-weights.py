@@ -26,6 +26,16 @@ n, bins, patches = plt.hist(weights, 50)
 print(n)
 plt.title("Entropy Weights Histogram")
 plt.savefig("entropy_weights_histogram.png", format='png')
+plt.clf()
+
+topic_usage = sum(normalize(user_topic_matrix))
+axes(xscale='log',yscale='log')
+plt.plot(weights,topic_usage,'ro')
+plt.title('Entropy Weight vs. Usage')
+plt.savefig("entropy_usage_plot.png", format='png')
+
+
+
 
 
 

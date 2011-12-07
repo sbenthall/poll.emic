@@ -1,6 +1,6 @@
 import re
 from settings import *
-from utils import get_followers_count
+from utils import *
 from pprint import pprint as pp
 import numpy
 from numpy import array,zeros,ones,dot
@@ -10,23 +10,12 @@ import os
 import simplejson as json
 from pylab import axes, axis
 
-
-user_tweet_matrix = numpy.load('user_tweet_matrix.npy')
 user_metadata_matrix = numpy.load('user_metadata_matrix.npy')
-tweet_topic_matrix = numpy.load('tweet_topic_matrix.npy')
 user_topic_matrix = numpy.load('user_topic_matrix.npy')
-
-    
-def normalize(dist):
-    total = sum(dist)
-    return dist / total
-
-def entropy(dist):
-    return 0 - sum([p * log(p) for p in normalize(dist)])
 
 def main():
 
-    entropies = [entropy(user_topic_matrix[i,:]) for i in range(user_topic_matrix.shape[0])]
+    entropies = entropy(user_topic_matrix)
 
     followers = user_metadata_matrix[:,1]
     print(followers)
@@ -38,7 +27,7 @@ def main():
     #should make the axis scale change with the _variance_ of data
     axis([min(entropies), max(entropies), 0, max(followers)*1.1])
     pyplot.plot(entropies,followers,'bo')
-    pyplot.title('Entropy vs. Foriends')
+    pyplot.title('Entropy vs. Friends')
     pyplot.savefig("entropy_friends_plot.png", format='png')
 
 if __name__ == "__main__":

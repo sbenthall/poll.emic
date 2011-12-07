@@ -3,6 +3,8 @@ import os
 import simplejson as json
 import time
 from twitter import TwitterHTTPError
+import numpy
+
 
 def load_snowball():
     if os.path.isfile("%s" % (SNOWBALL_PATH)):
@@ -64,5 +66,9 @@ def call_api(method,arguments,sleep_exp=1):
 
 
 def normalize(dist):
-    total = sum(dist)
-    return dist / total
+    return (dist.T / sum(dist.T).T).T
+
+
+def entropy(dist):
+    nd = normalize(dist)
+    return 0 - sum((nd * numpy.log(nd)).T).T

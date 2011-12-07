@@ -64,13 +64,6 @@ def get_user_metadata(indexed_usernames):
 
     return user_metadata_matrix
 
-def normalize(dist):
-    total = sum(dist)
-    return dist / total
-
-def entropy(dist):
-    return 0 - sum([p * log(p) for p in normalize(dist)])
-
 def main():
 
     print "Starting to prepare data"

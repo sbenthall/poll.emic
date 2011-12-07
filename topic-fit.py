@@ -27,6 +27,19 @@ weights,residue,rank,singulars = numpy.linalg.lstsq(normalized_user_topic_matrix
 plt.plot(weights[:,0],weights[:,1],'bo')
 plt.title('Followers Weight vs. Friend Weight')
 plt.savefig("n_weights_plot.png", format='png')
+plt.clf()
+
+n, bins, patches = plt.hist(weights[:,0], 50)
+print(n)
+plt.title("Followers Weights Histogram")
+plt.savefig("followers_weights_histogram.png", format='png')
+plt.clf()
+
+n, bins, patches = plt.hist(weights[:,1], 50)
+print(n)
+plt.title("Friends Weights Histogram")
+plt.savefig("friends_weights_histogram.png", format='png')
+plt.clf()
 
 #import topics file to dict
 topics = open(TOPIC_PATH)

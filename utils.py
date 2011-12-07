@@ -68,7 +68,9 @@ def call_api(method,arguments,sleep_exp=1):
 def normalize(dist):
     return (dist.T / sum(dist.T).T).T
 
+#this is a hack
+EPSILON = 0.0000000000000001
 
 def entropy(dist):
-    nd = normalize(dist)
+    nd = normalize(dist) + EPSILON
     return 0 - sum((nd * numpy.log(nd)).T).T

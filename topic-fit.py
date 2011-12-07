@@ -24,6 +24,12 @@ normalized_user_topic_matrix = normalize(user_topic_matrix.T).T
 
 weights,residue,rank,singulars = numpy.linalg.lstsq(normalized_user_topic_matrix,numpy.log10(user_metadata_matrix + 1))
 
+
+plt.plot(user_metadata_matrix[:,0],user_metadata_matrix[:,1],'bo')
+plt.title('Followers vs. Friends')
+plt.savefig("followers-friends_plot.png", format='png')
+plt.clf()
+
 plt.plot(weights[:,0],weights[:,1],'bo')
 plt.title('Followers Weight vs. Friend Weight')
 plt.savefig("n_weights_plot.png", format='png')

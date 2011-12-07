@@ -20,6 +20,13 @@ def clean(tweet):
     clean_tweet = re.sub("[\n\r\t]",' ',clean_tweet)
     #clean out retweet 'RT'
     clean_tweet = re.sub("^RT ",'',clean_tweet)
+
+    if AGGREGATE_TWEETS:
+        try:
+            clean_tweet.decode('ascii')
+        except UnicodeEncodeError:
+            return ""
+
     return clean_tweet
 
 def parse_json_log(username):
@@ -51,14 +58,23 @@ def main():
         if len(clean_tweets) < CUTOFF:
             print "%s has fewer than %d tweets.  Leaving out of sample data."%(screen_name, CUTOFF)
         else:
-            for clean_tweet in clean_tweets:
-                print(clean_tweet)
-                try:
-                    tweet_file.write(u"twitter %s %s\n" % (screen_name, clean_tweet))
+            if not AGGREGATE_TWEETS:
+                for clean_tweet in clean_tweets:
+                    print(clean_tweet)
+                    try:
+                        tweet_file.write(u"twitter %s %s\n" % (screen_name, clean_tweet))
 
-                    tweet_file.flush()
-                except:
-                    'Error: Exception writing this tweet'
+                        tweet_file.flush()
+                    except:
+                        'Error: Exception writing this tweet'
+            else:
+                all_tweets = " ".join(clean_tweets)
+                print(all_tweets)
+                tweet_file.write(u"twitter %s %s\n" % (screen_name, all_tweets))
+
+                tweet_file.flush()
+
+
 
     tweet_file.close()
 

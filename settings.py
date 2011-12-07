@@ -30,6 +30,8 @@ SNOWBALL_PATH = "snowball-%d-%d.json" % (EGO, HOPS)
 
 ## EXTRACT PARAMETERS
 
+AGGREGATE_TWEETS = True
+
 DUMP_PATH = "sample-data/"
 DUMP_FILE = "sample-data/tweets.txt"
 

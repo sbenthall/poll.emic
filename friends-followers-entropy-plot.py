@@ -1,6 +1,6 @@
 import re
 from settings import *
-from utils import get_followers_count
+from utils import *
 from pprint import pprint as pp
 import numpy
 from numpy import array,zeros,ones,dot
@@ -13,14 +13,6 @@ from mpl_toolkits.mplot3d import Axes3D
 
 user_metadata_matrix = numpy.load('user_metadata_matrix.npy')
 user_topic_matrix = numpy.load('user_topic_matrix.npy')
-    
-def normalize(dist):
-    total = sum(dist)
-    return dist / total
-
-def entropy(dist):
-    return 0 - sum([p * log(p) for p in normalize(dist)])
-
 
 def main():
 

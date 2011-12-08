@@ -47,6 +47,7 @@ plt.title("Friends Weights Histogram")
 plt.savefig("friends_weights_histogram.png", format='png')
 plt.clf()
 
+ 
 #import topics file to dict
 topics = open(TOPIC_PATH)
 topic_dict = dict()
@@ -86,3 +87,10 @@ sorted_friend_topics = open(SORTED_FRIEND_TOPIC_PATH, 'w')
 for index, topic in enumerate(sorted_friend):
     print index, '\t', topic[0], '\t', topic_dict.get(str(topic[0]))
     sorted_friend_topics.write("%d\t%d\t%s\n" % (index, topic[0], topic_dict.get(str(topic[0]))))
+
+plt.clf()
+axes(yscale='log')
+plt.plot(user_topic_matrix[:,152], user_metadata_matrix[:,0], 'ro')
+plt.plot(user_topic_matrix[:,25], user_metadata_matrix[:,0], 'bo')
+plt.title('topic Weight vs. Follower')
+plt.savefig("152&25_weights_v_follower.png", format='png')

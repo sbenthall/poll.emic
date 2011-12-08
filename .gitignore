@@ -67,3 +67,16 @@ entropy-v-friends.pyc
 topic-follower-sorted.txt
 
 topic-friend-sorted.txt
+/user_freq_matrix.npy
+/consistency vs. follower.png
+/152&25_weights_v_follower.png
+/frequency vs. follower.png
+/98_weights_v_follower.png
+/frequency_histogram.png
+/25_weights_v_follower.png
+/sample-data
+/log
+
+user_freq.json
+
+indexed_usernames.json

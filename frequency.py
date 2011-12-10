@@ -28,7 +28,6 @@ def calculate_frequency(username):
         time1 = None
         for tweet in log:
             time = re.findall(TIME_REG, tweet['created_at'])
-            #print tweet['created_at']
             for month, day, hour, minute, year in time:
                 #print year, month, day, hour, ':',  minute
                 #print type(month_dict[month]), type(day), type(hour), type(minute)
@@ -37,18 +36,15 @@ def calculate_frequency(username):
                 #print time2
                 if time1 != None:
                     time_diff = time1 - time2
-                    #print time_diff
-                    #print time_diff.total_seconds()/3600
                     time_stamps.append(time_diff.total_seconds()/3600)
+                    #duration in hours
                 time1 = time2    
-                
-        #return [clean(tweet['text']) for tweet in log]
         return time_stamps
     else:
         print "No log %s found, returning blank" % (log_name)
         return ""
 
-def get_user_index():
+def generate_user_index():
     user_tweet_matrix, indexed_usernames = preparedata.parse_tweets()
     file = open(USER_INDEX_PATH, 'w')
     file.write(json.dumps(indexed_usernames))
@@ -61,9 +57,7 @@ def calculate_all_freq():
     
     for screen_name in indexed_usernames:
         time_stamp = calculate_frequency(screen_name)
-        #print time_stamp
-        #print (1/numpy.average(time_stamp))*24    #tweets per day
-        freq.append((1/numpy.average(time_stamp))*24)   #duration per tweet (hr)
+        freq.append((1/numpy.average(time_stamp))*24)   #tweets per day   
         std.append(numpy.std(time_stamp))
         #print numpy.average(time_stamp)
         #print numpy.std(time_stamp)
@@ -89,6 +83,8 @@ def generate_user_freq_matrix():
         
 def main():
     
+    #if users data changed, need to start from below functions:
+    #generate_user_index()
     #calculate_all_freq()
     #generate_user_freq_matrix()
     
@@ -118,9 +114,18 @@ def main():
     plt.title('consistency vs. follower')
     plt.savefig("consistency vs. follower.png", format='png')    
         
-    #numpy.append(user_metadata_matrix, [[freq_list]], axis=1)
+    plt.clf()
+    axes(yscale='log', xscale='log')
+    plt.plot(user_freq_matrix[:,2], user_freq_matrix[:,1], 'bo')
+    plt.title('frequency vs. friend')
+    plt.savefig("frequency vs. friend.png", format='png')  
     
-
+    plt.clf()
+    axes(yscale='log', xscale='log')
+    plt.plot(user_freq_matrix[:,3], user_freq_matrix[:,1], 'bo')
+    plt.title('consistency vs. friend')
+    plt.savefig("consistency vs. friend.png", format='png')  
     
+        
 if __name__ == "__main__":
     main()

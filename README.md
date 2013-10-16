@@ -1,11 +1,8 @@
-This repository is for tools for studying Twitter using probabilistic topic modelling.
+This is a tool for visualizing the perspective of a Twitter user's relations with others, based on publically available data.
 
-It uses MALLET to do the topic inference, using LDA.
+It is a fork of `topical-topology`, an earlier research project.
 
 ## Setup and usage
-
-To execute, first unpack the mallet script:
-tar -xzf mallet-2.0.6.tar-gz
 
 settings.py has the global settings for all the scripts
 

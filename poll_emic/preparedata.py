@@ -8,27 +8,6 @@ import os
 import simplejson as json
 
 
-TOPICS_PATTERN = "(\d*) null-source ([ .\d]*)"
-TOPIC_PATTERN = "(\d*) (0\.\d*)"
-
-TWEET_DATA_FILE = "sample-data/tweets.txt"
-TWEET_DATA_PATTERN = "twitter (\S*) (.*)\n"
-
-def parse_topics():
-    ''' Returns an M by N array, where M is number of tweets, N is number of topics, and A[m,n] is the value of the m'th topic for the n'th tweet. '''
-
-    inferred_topics_string = open(INFERRED_FILE,'r').read()
-    matches = re.findall(TOPICS_PATTERN, inferred_topics_string)
-
-    topic_data = zeros((len(matches),NUM_TOPICS))
-
-    for i,(index,topics) in enumerate(matches):
-        tm = re.findall(TOPIC_PATTERN,topics)
-
-        for topic, value in tm:
-            topic_data[int(index),int(topic)] = float(value)
-
-    return topic_data
 
 def parse_tweets():
     tweet_file = open(TWEET_DATA_FILE,'r')

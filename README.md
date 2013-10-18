@@ -2,28 +2,26 @@ This is a tool for visualizing the perspective of a Twitter user's relations wit
 
 It is a fork of `topical-topology`, an earlier research project.
 
-## Setup and usage
+## Setup and configuration
 
-settings.py has the global settings for all the scripts
+Clone the repository and run
 
-then run these scripts in the following order:
+    python setup.py develop
 
-getsnowball.py -> finds a 'snowball' of users
-getLog.py -> logs last 200 tweets of each user in snowball
-extract.py -> extracts the tweets from the logs into a format usable by MALLET
-infertopics.py -> Use MALLET to infer topics on the tweets using LDA
-preparedata.py -> parse data into numpy arrays and persist as .npy files
+settings.py has the global settings
 
-then use the analysis scripts, or write your own
-
-
-## Config
-
-To properly configure the scripts, you need to supply a file, config.cfg, with the following contents:
-
+You will also need to supply a file, config.cfg, with the following information to authenticate with the TWitter API:
 
 [OAuth]
 accesstoken:realaccesstoken
 accesstokenkey:realtokenkey
 consumerkey:consumerkey
 consumersecret:consumersecret
+
+## Usage
+
+For one application of this, try running the getsnowball script.
+
+    python bin/getsnowball.py
+
+This should start crawling a snowball centered on a particular Twitter user.

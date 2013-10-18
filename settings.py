@@ -10,6 +10,7 @@ HOPS = 3
 
 CONNECTION_NO = 20
 
+LOGGING_PATH = "logging"
 
 METADATA_PATH = "accounts/metadata/"
 FRIENDS_PATH = "accounts/friends/"

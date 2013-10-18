@@ -9,8 +9,6 @@ from settings import *
 from authtwitter import twitter
 from utils import *
 
-
-LOGGING_PATH = "logging"
 if not os.path.exists(LOGGING_PATH):
     os.makedirs(LOGGING_PATH)
 

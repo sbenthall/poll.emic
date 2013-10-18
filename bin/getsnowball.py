@@ -1,39 +1,29 @@
+#!/usr/bin/env python
+
+from settings import *
 from poll_emic.apiwrapper import *
 
+"""
+Collects and cashes information from a "snowball" of
+Twitter users.
+"""
 
-def lookupMulti(user_ids):
-    if len(user_ids) > 100:
-        print("Attempting lookup on %d, paring down." % len(user_ids))
-        s = set()
-        while len(user_ids) > 0:
-            if len(s) == 100:
-                print("Looking up subset, %d to go" % len(user_ids))
-                lookupMulti(s)
-                s = set()
-            s.add(user_ids.pop())
-    else:
-        new_ids = set()
-        for id in user_ids:
-            if not os.path.isfile("%s%s.json" % (METADATA_PATH, id)):
-                new_ids.add(id)
-    
-        print "new ID: ", new_ids
-        logger.debug("new ID: %s", new_ids)
-    
-        if len(new_ids) > 0:
-            query = ",".join([str(x) for x in new_ids])
-            logger.debug(query)
-            try:
-                metadatas = call_api(twitter.users.lookup,
-                                     {'user_id':query})
-                for user in metadatas:
-                    logger.debug(user)
-                    file = open('%s%s.json'%(METADATA_PATH,user['id']),'w')
-                    file.write(json.dumps(user))
+## GET SNOWBALL PARAMETERS
 
-            except TwitterHTTPError as e:
-                print e
-                logger.error(e)
+# User ID of the 'ego' of the snowball
+EGO = 14437549
+
+#Number of hops for snowball collection
+HOPS = 3
+
+CONNECTION_NO = 20
+
+SNOWBALL_PATH = "snowball-%d-%d.json" % (EGO, HOPS)
+
+#when filter followers, true: pick randomly,
+ #false: pick from beginning
+FILTER_RANDOM = False 
+
 
 
 def filter(users):
@@ -60,6 +50,10 @@ def filter(users):
 
 
 def get_snowball_s(start, hops, mutual):
+    """
+    Collects and cashes information from a "snowball" of
+    Twitter users.
+    """
     logger.info("*** snowball starts!!!")
     snowball_set = {}
     to_crawl = set({start})

@@ -6,6 +6,15 @@ from poll_emic.apiwrapper import *
 """
 Gets the user timeline status for everything in a snowball
 """
+SNOWBALL_PATH = "snowball-14437549-2.json"
+
+def load_snowball():
+    if os.path.isfile("%s" % (SNOWBALL_PATH)):
+        snowball_file = open("%s" % (SNOWBALL_PATH),'r')
+        snowball = json.loads(snowball_file.read())
+        return snowball
+    else:
+        print "error"
 
 
 snowball = load_snowball()

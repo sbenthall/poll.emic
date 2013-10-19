@@ -19,8 +19,6 @@ hdlr.setFormatter(formatter)
 logger.addHandler(hdlr) 
 logger.setLevel(logging.DEBUG)
 
-# figure out how to move this to settings
-CACHE_PATH = "cache"
 
 CACHE_LOOKUP_PATH = os.path.join(CACHE_PATH,"twitter.users.lookup")
 if not os.path.exists(CACHE_LOOKUP_PATH):

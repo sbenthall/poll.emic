@@ -18,6 +18,9 @@ accesstokenkey:realtokenkey
 consumerkey:consumerkey
 consumersecret:consumersecret
 
+[Settings]
+cachepath:path/to/cache/directory
+
 ## Usage
 
 For one application of this, try running the getsnowball script.

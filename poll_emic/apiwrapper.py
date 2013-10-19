@@ -7,6 +7,13 @@ import os
 import random
 from authtwitter import twitter
 from utils import *
+import ConfigParser
+
+
+config= ConfigParser.ConfigParser()
+config.read('config.cfg')
+
+CACHE_PATH = config.get('Settings','cachepath')
 
 if not os.path.exists(LOGGING_PATH):
     os.makedirs(LOGGING_PATH)

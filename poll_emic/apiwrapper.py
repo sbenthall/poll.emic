@@ -103,8 +103,6 @@ def lookupMulti(user_ids):
                 logger.error(e)
 
 
-API_URL = "http://api.twitter.com/1/"
-
 def get_friends(user_id):
     file_path = os.path.join(CACHE_FRIENDS_PATH,"%s.json" % user_id)
     if os.path.isfile(file_path):

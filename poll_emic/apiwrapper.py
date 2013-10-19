@@ -149,8 +149,15 @@ def get_followers(user_id):
 if not os.path.exists(LOG_PATH):
     os.makedirs(LOG_PATH)
 
+CACHE_STATUSES_PATH = os.path.join(CACHE_PATH,"twitter.statuses.user_timeline")
+if not os.path.exists(CACHE_STATUSES_PATH):
+    os.makedirs(CACHE_STATUSES_PATH)
+
+# shouldn't be hard coded here...
+SLEEP = 5
+
 def use_statuses_api(screen_name):
-    log_path = "%s%s.json" % (LOG_PATH, screen_name)
+    log_path = os.path.join(CACHE_STATUSES_PATH,"%s.json" % screen_name)
 
     if os.path.isfile(log_path):
         print "File %s already exists, not overwriting" % (log_path)

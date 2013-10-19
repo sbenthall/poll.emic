@@ -160,9 +160,9 @@ def use_statuses_api(screen_name):
     log_path = os.path.join(CACHE_STATUSES_PATH,"%s.json" % screen_name)
 
     if os.path.isfile(log_path):
-        print "File %s already exists, not overwriting" % (log_path)
-        return
-
+        logger.debug("statuses for username: %s exists in cache." % screen_name)
+        file = open(log_path)
+        return json.loads(file.read())
     try:
         tweets = call_api(twitter.statuses.user_timeline,
                           {'screen_name': screen_name,
@@ -172,6 +172,7 @@ def use_statuses_api(screen_name):
         pp("Collected tweets for "+ screen_name)
         file = open(log_path, 'w')
         file.write(json.dumps(tweets))
+        return tweets
     except TwitterHTTPError as e:
         print("Exception raised for %s.  Continuing." % (screen_name))
         time.sleep(SLEEP)

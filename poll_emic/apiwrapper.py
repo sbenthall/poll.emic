@@ -43,6 +43,15 @@ CACHE_FOLLOWERS_PATH = os.path.join(CACHE_PATH,"twitter.followers.ids")
 if not os.path.exists(CACHE_FOLLOWERS_PATH):
     os.makedirs(CACHE_FOLLOWERS_PATH)
 
+# determine if the UID is a user ID number or a screenname,
+# and return the appropriate query parameter name
+def id_or_sn(uid):
+    if isinstance(uid,int):
+        return 'user_id'
+    elif isinstance(uid,str):
+        return 'screen_name'
+    else:
+        raise Exception("UID is neither integer nor string")
 
 def lookup(user_id):
     # return user's metadata information
@@ -55,7 +64,7 @@ def lookup(user_id):
         logger.debug("id: %s does not exists in cache. Will retrieve it from web." % user_id)
         try:
             metadata = call_api(twitter.users.lookup,
-                                {'user_id':user_id})[0]
+                                {id_or_sn(user_id):user_id})[0]
             file = open(file_path, 'w')
             file.write(json.dumps(metadata))
             return metadata
@@ -114,7 +123,7 @@ def get_friends(user_id):
             #watch out, new API change includes cursor info
             #by default
             friends_response = call_api(twitter.friends.ids,
-                                        {'user_id':user_id})
+                                        {id_or_sn(user_id):user_id})
             friends = friends_response['ids']
             print(friends_response)
             logger.debug("id: %s \n friends: %s ", user_id, friends)
@@ -134,7 +143,7 @@ def get_followers(user_id):
     else:
         try:
             followers_response = call_api(twitter.followers.ids,
-                                          {'user_id':user_id})
+                                          {id_or_sn(user_id):user_id})
             logger.debug("id: %s \n followers response: %s "% (user_id, followers_response))
             followers = followers_response['ids']
             logger.debug("id: %s \n followers: %s ", user_id, followers)
@@ -165,7 +174,7 @@ def use_statuses_api(screen_name):
         return json.loads(file.read())
     try:
         tweets = call_api(twitter.statuses.user_timeline,
-                          {'screen_name': screen_name,
+                          {id_or_sn(screen_name): screen_name,
                            'count': 200,
                            'include_rts': 1
                            })

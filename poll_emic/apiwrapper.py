@@ -78,6 +78,17 @@ def lookup(user_id):
                                twitter.users.lookup,
                                'twitter.users.lookup')
 
+def get_friends(user_id):
+    data =  call_api_with_cache(user_id,
+                                twitter.friends.ids,
+                                'twitter.friends.ids')
+
+    friends = set(data['ids'])
+
+    return friends
+
+
+
 def lookupMulti(user_ids):
     """ """
     if len(user_ids) > 100:
@@ -114,29 +125,6 @@ def lookupMulti(user_ids):
             except TwitterHTTPError as e:
                 print e
                 logger.error(e)
-
-
-def get_friends(user_id):
-    file_path = os.path.join(CACHE_FRIENDS_PATH,"%s.json" % user_id)
-    if os.path.isfile(file_path):
-        logger.debug("friends id: %s exists in cache." % user_id)
-        file = open(file_path)
-        return set(json.loads(file.read()))
-    else:
-        try:
-            #watch out, new API change includes cursor info
-            #by default
-            friends_response = call_api(twitter.friends.ids,
-                                        {id_or_sn(user_id):user_id})
-            friends = friends_response['ids']
-            print(friends_response)
-            logger.debug("id: %s \n friends: %s ", user_id, friends)
-            file = open(file_path, 'w')
-            file.write(json.dumps(friends))
-            return set(friends)
-        except TwitterHTTPError as e:
-            print e
-            return set()
 
 def get_followers(user_id):
     file_path = os.path.join(CACHE_FOLLOWERS_PATH,"%s.json" % user_id)

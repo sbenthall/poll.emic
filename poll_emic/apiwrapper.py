@@ -53,26 +53,32 @@ def id_or_sn(uid):
     else:
         raise Exception("UID is neither integer nor string")
 
-def lookup(user_id):
-    # return user's metadata information
-    file_path = os.path.join(CACHE_LOOKUP_PATH,"%s.json" % user_id)
+def call_api_with_cache(user_id, method, method_name):
+    # first check the cache
+    file_path = os.path.join(CACHE_PATH,method_name,"%s.json" % user_id)
     if os.path.isfile(file_path):
-        logger.debug("id: %s exists in cache." % user_id)
+        logger.debug("%s %s exists in cache." % (method_name, user_id))
         file = open(file_path)
         return json.loads(file.read())
     else:
-        logger.debug("id: %s does not exists in cache. Will retrieve it from web." % user_id)
+    # if not in cache call the API
+        logger.debug("%s %s does not exists in cache. Will retrieve it from web." % (method_name, user_id))
         try:
-            metadata = call_api(twitter.users.lookup,
+            data = call_api(method,
                                 {id_or_sn(user_id):user_id})[0]
             file = open(file_path, 'w')
-            file.write(json.dumps(metadata))
-            return metadata
+            file.write(json.dumps(data))
+            return data
         except TwitterHTTPError as e:
             print e
             logger.error(e)
             #hack to prevent crawling this
-            return {'followers_count': 0, 'error': e}
+            return {'error': e}
+
+def lookup(user_id):
+    return call_api_with_cache(user_id,
+                               twitter.users.lookup,
+                               'twitter.users.lookup')
 
 def lookupMulti(user_ids):
     """ """

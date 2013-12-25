@@ -9,12 +9,11 @@ Twitter users.
 """
 
 ## GET SNOWBALL PARAMETERS
-
 # User ID of the 'ego' of the snowball
 EGO = 14437549
 
 #Number of hops for snowball collection
-HOPS = 3
+HOPS = 2
 
 CONNECTION_NO = 20
 

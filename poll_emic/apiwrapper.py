@@ -19,6 +19,17 @@ config.read('config.cfg')
 
 CACHE_PATH = config.get('Settings','cachepath')
 
+# better to integrate with the method declarations.
+method_names = ["twitter.users.lookup",
+                "twitter.friends.ids",
+                "twitter.followers.ids"]
+
+for method_name in method_names:
+    path = os.path.join(CACHE_PATH,method_name)
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+
 if not os.path.exists(LOGGING_PATH):
     os.makedirs(LOGGING_PATH)
 
@@ -29,19 +40,6 @@ formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 hdlr.setFormatter(formatter)
 logger.addHandler(hdlr) 
 logger.setLevel(logging.DEBUG)
-
-
-CACHE_LOOKUP_PATH = os.path.join(CACHE_PATH,"twitter.users.lookup")
-if not os.path.exists(CACHE_LOOKUP_PATH):
-    os.makedirs(CACHE_LOOKUP_PATH)
-
-CACHE_FRIENDS_PATH = os.path.join(CACHE_PATH,"twitter.friends.ids")
-if not os.path.exists(CACHE_FRIENDS_PATH):
-    os.makedirs(CACHE_FRIENDS_PATH)
-
-CACHE_FOLLOWERS_PATH = os.path.join(CACHE_PATH,"twitter.followers.ids")
-if not os.path.exists(CACHE_FOLLOWERS_PATH):
-    os.makedirs(CACHE_FOLLOWERS_PATH)
 
 # determine if the UID is a user ID number or a screenname,
 # and return the appropriate query parameter name
@@ -109,7 +107,7 @@ def lookupMulti(user_ids):
                                      {'user_id':query})
                 for user in metadatas:
                     logger.debug(user)
-                    file_path = os.path.join(CACHE_LOOKUP_PATH,"%s.json" % user['id'])
+                    file_path = os.path.join(CACHE_PATH,"twitter.users.lookup","%s.json" % user['id'])
                     file = open(file_path,'w')
                     file.write(json.dumps(user))
 

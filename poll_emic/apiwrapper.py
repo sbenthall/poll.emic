@@ -147,15 +147,9 @@ def get_followers(user_id):
             return set()
 
 
-if not os.path.exists(LOG_PATH):
-    os.makedirs(LOG_PATH)
-
 CACHE_STATUSES_PATH = os.path.join(CACHE_PATH,"twitter.statuses.user_timeline")
 if not os.path.exists(CACHE_STATUSES_PATH):
     os.makedirs(CACHE_STATUSES_PATH)
-
-# shouldn't be hard coded here...
-SLEEP = 5
 
 def use_statuses_api(screen_name):
     log_path = os.path.join(CACHE_STATUSES_PATH,"%s.json" % screen_name)
@@ -176,4 +170,4 @@ def use_statuses_api(screen_name):
         return tweets
     except TwitterHTTPError as e:
         print("Exception raised for %s.  Continuing." % (screen_name))
-        time.sleep(SLEEP)
+        return []

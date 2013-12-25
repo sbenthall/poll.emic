@@ -2,15 +2,19 @@ from poll_emic.apiwrapper import *
 from collections import Counter
 from itertools import chain
 from pprint import pprint as pp
+import networkx as nx
+import sys
 
-USER = 'sbenthall'
+USER = "sbenthall"
 
 DATA = {}
 
 def get_mention_counts(user):
-    mentions = [tweet['entities']['user_mentions'] for tweet in use_statuses_api(user)]
+    mentions = [tweet['entities']['user_mentions']
+                for tweet in use_statuses_api(user)]
     
-    counts = Counter([user['screen_name'] for user in chain.from_iterable(mentions)])
+    counts = Counter([user['screen_name']
+                      for user in chain.from_iterable(mentions)])
 
     return counts
 

@@ -49,7 +49,7 @@ def id_or_sn(uid):
     elif isinstance(uid,str):
         return 'screen_name'
     else:
-        raise Exception("UID is neither integer nor string")
+        raise Exception("UID %s is neither integer nor string" % uid)
 
 def call_api_with_cache(user_id, method, method_name):
     # first check the cache

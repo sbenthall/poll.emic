@@ -2,6 +2,13 @@ This is a tool for visualizing the perspective of a Twitter user's relations wit
 
 It is a fork of `topical-topology`, an earlier research project.
 
+## Dependencies
+
+Twitter
+numpy
+networkx
+matplotlib
+
 ## Setup and configuration
 
 Clone the repository and run

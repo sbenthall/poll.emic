@@ -63,7 +63,7 @@ def call_api_with_cache(user_id, method, method_name):
         logger.debug("%s %s does not exists in cache. Will retrieve it from web." % (method_name, user_id))
         try:
             data = call_api(method,
-                                {id_or_sn(user_id):user_id})[0]
+                            {id_or_sn(user_id):user_id})
             file = open(file_path, 'w')
             file.write(json.dumps(data))
             return data

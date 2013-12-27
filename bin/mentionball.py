@@ -43,9 +43,16 @@ def data_to_network(data):
     for user in G.nodes():
         pp('Adding node attributes for %s' % user)
 
-        pp(lookup(user))
-        data['nodes'][user] = lookup(user)[0] ## can we batch lookup?
-        G[user]['followers_count'] = data['nodes'][user]['followers_count']
+        try:
+            data['nodes'][user] = lookup(user)[0] ## can we batch lookup?
+            G[user]['followers_count'] = data['nodes'][user]['followers_count']
+        except TwitterHTTPError as e:
+            print e
+            pp("Removing %s" % user)
+            G.remove_node(user)
+        except KeyError as e:
+            pp(lookup(user))
+            print e
 
     return G
 

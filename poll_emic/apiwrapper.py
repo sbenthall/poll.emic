@@ -56,12 +56,17 @@ def id_or_sn(query):
     else:
         raise Exception("UID %s is a %s, not an integer nor string nor a nonempty list" % (query,str(type(query))))
 
+def cache_file_path(method_name,user):
+    return os.path.join(CACHE_PATH,method_name,"%s.json" % user)
+
+def is_cached(method_name,user):
+    return os.path.isfile(cache_file_path(method_name,user))
+
 def call_api_with_cache(user_id, method, method_name):
     # first check the cache
-    file_path = os.path.join(CACHE_PATH,method_name,"%s.json" % user_id)
-    if os.path.isfile(file_path):
+    if is_cached(method_name,user_id):
         logger.debug("%s %s exists in cache." % (method_name, user_id))
-        file = open(file_path)
+        file = open(cache_file_path(method_name,user_id))
         return json.loads(file.read())
     else:
     # if not in cache call the API
@@ -69,11 +74,10 @@ def call_api_with_cache(user_id, method, method_name):
         try:
             data = call_api(method,
                             {id_or_sn(user_id):user_id})
-            file = open(file_path, 'w')
-            file.write(json.dumps(data))
+            cache_file = open(cache_file_path(method_name,user_id), 'w')
+            cache_file.write(json.dumps(data))
             return data
         except TwitterHTTPError as e:
-            print e
             logger.error(e)
             #hack to prevent crawling this
             return {'error': e}

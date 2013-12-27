@@ -9,8 +9,10 @@ def get_mention_counts(user):
 
     pp("Getting mention counts for %s" % user)
 
+    tweets = use_statuses_api(user)
+
     mentions = [tweet['entities']['user_mentions']
-                for tweet in use_statuses_api(user)]
+                for tweet in tweets]
     
     counts = Counter([user['screen_name']
                       for user in chain.from_iterable(mentions)])

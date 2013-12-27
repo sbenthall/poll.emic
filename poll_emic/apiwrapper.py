@@ -54,7 +54,7 @@ def id_or_sn(query):
         elif isinstnace(query[0],str):
             return 'screen_name'
     else:
-        raise Exception("UID %s is neither integer nor string nor a nonempty list" % query)
+        raise Exception("UID %s is a %s, not an integer nor string nor a nonempty list" % (query,str(type(query))))
 
 def call_api_with_cache(user_id, method, method_name):
     # first check the cache

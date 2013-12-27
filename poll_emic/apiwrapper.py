@@ -43,13 +43,18 @@ logger.setLevel(logging.DEBUG)
 
 # determine if the UID is a user ID number or a screenname,
 # and return the appropriate query parameter name
-def id_or_sn(uid):
-    if isinstance(uid,int):
+def id_or_sn(query):
+    if isinstance(query,int):
         return 'user_id'
-    elif isinstance(uid,str):
+    elif isinstance(query,str):
         return 'screen_name'
+    elif isinstance(query,list) and len(query) > 0:
+        if isinstance(query[0],int):
+            return 'user_id'
+        elif isinstnace(query[0],str):
+            return 'screen_name'
     else:
-        raise Exception("UID %s is neither integer nor string" % uid)
+        raise Exception("UID %s is neither integer nor string nor a nonempty list" % uid)
 
 def call_api_with_cache(user_id, method, method_name):
     # first check the cache
@@ -91,6 +96,7 @@ def get_friends(user_id):
 
 def lookupMulti(user_ids):
     """ """
+    method_name = 'twitter.users.lookup'
     if len(user_ids) > 100:
         print("Attempting lookup on %d, paring down." % len(user_ids))
         s = set()
@@ -102,10 +108,11 @@ def lookupMulti(user_ids):
             s.add(user_ids.pop())
     else:
         new_ids = set()
-        for id in user_ids:
-            file_path = os.path.join(CACHE_LOOKUP_PATH,"%s.json" % id)
+        for uid in user_ids:
+            file_path = os.path.join(CACHE_PATH,method_name,"%s.json" % uid)
+            
             if not os.path.isfile(file_path):
-                new_ids.add(id)
+                new_ids.add(uid)
     
         print "new ID: ", new_ids
         logger.debug("new ID: %s", new_ids)
@@ -115,10 +122,11 @@ def lookupMulti(user_ids):
             logger.debug(query)
             try:
                 metadatas = call_api(twitter.users.lookup,
-                                     {'user_id':query})
+                                     {id_or_sn(query):query})
                 for user in metadatas:
                     logger.debug(user)
-                    file_path = os.path.join(CACHE_PATH,"twitter.users.lookup","%s.json" % user['id'])
+                    file_path =  os.path.join(CACHE_PATH,method_name,"%s.json" % user['id'])
+
                     file = open(file_path,'w')
                     file.write(json.dumps(user))
 

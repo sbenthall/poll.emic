@@ -43,7 +43,7 @@ def call_api(method,arguments,sleep_exp=1):
             raise e
         elif code == 406: # Invalid format for search request
             raise e
-        elif code == 420: # Search or Trends API rate limited
+        elif code == 420 or code == 429: # API rate limited
             return call_again()
         elif code == 500: # 'Something is broken'
             raise e

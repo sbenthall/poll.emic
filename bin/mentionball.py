@@ -19,24 +19,33 @@ def get_mention_counts(user):
 
     return counts
 
-def get_mention_data(ego):
-    data = {}
+def get_mention_data(user,data):
+    data['edges'][user] = get_mention_counts(user)
 
-    data[ego] = get_mention_counts(ego)
 
-    for user in data[ego].keys():
-        data[user] = get_mention_counts(user)
+def get_mentionball(ego, data):
 
-    pp(data)
+    get_mention_data(ego,data)
+
+    for user in data['edges'][ego].keys():
+        get_mention_data(user,data)
 
     return data
+
 
 def data_to_network(data):
     G = nx.DiGraph()
 
-    for fromu in data.keys():
-        for tou in data[fromu].keys():
-            G.add_edge(fromu,tou,weight=data[fromu][tou])
+    for fromu in data['edges'].keys():
+        for tou in data['edges'][fromu].keys():
+            G.add_edge(fromu,tou,weight=data['edges'][fromu][tou])
+
+    for user in G.nodes():
+        pp('Adding node attributes for %s' % user)
+
+        pp(lookup(user))
+        data['nodes'][user] = lookup(user)[0] ## can we batch lookup?
+        G[user]['followers_count'] = data['nodes'][user]['followers_count']
 
     return G
 
@@ -49,7 +58,9 @@ def clean_ball(graph):
 
 def main(ego):
 
-    data = get_mention_data(ego)
+    data = {'nodes': {}, 'edges': {}}
+
+    data = get_mentionball(ego,data)
 
     G = data_to_network(data)
 

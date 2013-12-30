@@ -130,35 +130,38 @@ def use_statuses_api(user_id):
                                parameters={'count' : 200,
                                            'include_rts':1})
 
-def lookupMulti(user_ids):
+def lookup_many(user_ids):
     """ """
     method_name = 'twitter.users.lookup'
-    if len(user_ids) > 100:
-        print("Attempting lookup on %d, paring down." % len(user_ids))
-        s = set()
-        while len(user_ids) > 0:
-            if len(s) == 100:
-                print("Looking up subset, %d to go" % len(user_ids))
-                lookupMulti(s)
-                s = set()
-            s.add(user_ids.pop())
-    else:
-        new_ids = [user for user in user_ids if not is_cached(method_name,user)]
 
-        print "new ID: ", new_ids
-        logger.debug("new ID: %s", new_ids)
-    
-        if len(new_ids) > 0:
-            query = ",".join([str(x) for x in new_ids])
-            logger.debug(query)
-            try:
-                metadatas = call_api(twitter.users.lookup,
-                                     {id_or_sn(query):query})
-                for user_data in metadatas:
-                    cache(method_name,user_data['screen_name'],user_data)
+    new_users = [user for user in user_ids
+               if not is_cached(method_name,user)]
 
-                return metadatas
+    cached_users = [user for user in user_ids
+               if is_cached(method_name,user)]
 
-            except TwitterHTTPError as e:
-                print e
-                logger.error(e)
+    data = {}
+
+    for user in cached_users:
+        data[user] = lookup(user)
+
+    for user_slice in [new_users[x:x+100]
+                       for x
+                       in xrange(0,len(new_users),100)]:
+
+        query = ",".join([str(x) for x in user_slice])
+        logger.debug("Query is %s" % query)
+
+        try:
+            metadatas = call_api(twitter.users.lookup,
+                                 {id_or_sn(query):query})
+            for user_data in metadatas:
+                screen_name = user_data['screen_name']
+                cache(method_name,screen_name,user_data)
+                data[screen_name] = user_data
+
+        except TwitterHTTPError as e:
+            print e
+            logger.error(e)
+
+    return data

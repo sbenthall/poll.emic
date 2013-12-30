@@ -99,7 +99,14 @@ def get_friends(user_id):
 
     return friends
 
+def get_followers(user_id):
+    data = call_api_with_cache(user_id,
+                               twitter.followers.ids,
+                               'twitter.followers.ids')
 
+    friends = set(data['ids'])
+
+    return friends
 
 def lookupMulti(user_ids):
     """ """
@@ -133,26 +140,6 @@ def lookupMulti(user_ids):
             except TwitterHTTPError as e:
                 print e
                 logger.error(e)
-
-def get_followers(user_id):
-    file_path = os.path.join(CACHE_FOLLOWERS_PATH,"%s.json" % user_id)
-    if os.path.isfile(file_path):
-        logger.debug("follower id: %s exists in cache." % user_id)
-        file = open(file_path)
-        return set(json.loads(file.read()))
-    else:
-        try:
-            followers_response = call_api(twitter.followers.ids,
-                                          {id_or_sn(user_id):user_id})
-            logger.debug("id: %s \n followers response: %s "% (user_id, followers_response))
-            followers = followers_response['ids']
-            logger.debug("id: %s \n followers: %s ", user_id, followers)
-            file = open(file_path, 'w')
-            file.write(json.dumps(followers))
-            return set(followers)
-        except TwitterHTTPError as e:
-            print e
-            return set()
 
 def use_statuses_api(screen_name):
     method_name = "twitter.statuses.user_timeline"

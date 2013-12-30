@@ -103,9 +103,15 @@ def call_api_with_cache(user_id, method, method_name,parameters={}):
             return {'error': e}
 
 def lookup(user_id):
-    return call_api_with_cache(user_id,
+    data = call_api_with_cache(user_id,
                                twitter.users.lookup,
                                'twitter.users.lookup')
+
+    #terrible hack -- why do I need this?
+    if isinstance(data,list):
+        data = data[0]
+
+    return data
 
 def get_friends(user_id):
     data = call_api_with_cache(user_id,

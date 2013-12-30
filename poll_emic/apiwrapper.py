@@ -91,9 +91,9 @@ def lookup(user_id):
                                'twitter.users.lookup')
 
 def get_friends(user_id):
-    data =  call_api_with_cache(user_id,
-                                twitter.friends.ids,
-                                'twitter.friends.ids')
+    data = call_api_with_cache(user_id,
+                               twitter.friends.ids,
+                               'twitter.friends.ids')
 
     friends = set(data['ids'])
 

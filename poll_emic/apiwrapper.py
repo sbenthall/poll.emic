@@ -48,6 +48,8 @@ def id_or_sn(query):
         return 'user_id'
     elif isinstance(query,str):
         return 'screen_name'
+    elif isinstance(query,unicode):
+        return 'screen_name'
     elif isinstance(query,list) and len(query) > 0:
         ## should make this not assume nonhomogenous lists
         ## and handle them gracefully

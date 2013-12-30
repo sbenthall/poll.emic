@@ -5,6 +5,8 @@ import logging
 test_user = 'twitter'
 
 def setup():
+    for method in method_names:
+        clear_cache(method,test_user)
     print "SETUP!"
 
 def teardown():
@@ -25,3 +27,10 @@ def get_friends_test():
 def get_followers_test():
     data = get_followers(test_user)
     assert isinstance(data,set), 'output is not a set'
+
+@with_setup(setup,teardown)
+def use_statuses_api_test():
+    data = use_statuses_api(test_user)
+    assert isinstance(data,list), 'output is not a list'
+    logger.debug("Length of statuses data is %d" % len(data))
+    assert len(data) == 200, 'output does not have 200 tweets' 

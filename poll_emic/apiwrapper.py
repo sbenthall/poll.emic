@@ -154,15 +154,11 @@ def get_followers(user_id):
             print e
             return set()
 
-
-CACHE_STATUSES_PATH = os.path.join(CACHE_PATH,"twitter.statuses.user_timeline")
-if not os.path.exists(CACHE_STATUSES_PATH):
-    os.makedirs(CACHE_STATUSES_PATH)
-
 def use_statuses_api(screen_name):
-    log_path = os.path.join(CACHE_STATUSES_PATH,"%s.json" % screen_name)
+    method_name = "twitter.statuses.user_timeline"
+    log_path = cache_file_path(method_name,screen_name)
 
-    if os.path.isfile(log_path):
+    if is_cached(method_name,screen_name):
         logger.debug("statuses for username: %s exists in cache." % screen_name)
         file = open(log_path)
         return json.loads(file.read())
@@ -172,7 +168,7 @@ def use_statuses_api(screen_name):
                            'count': 200,
                            'include_rts': 1
                            })
-        pp("Collected tweets for "+ screen_name)
+
         file = open(log_path, 'w')
         file.write(json.dumps(tweets))
         return tweets

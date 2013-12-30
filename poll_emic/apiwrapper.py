@@ -113,6 +113,13 @@ def get_followers(user_id):
 
     return friends
 
+def use_statuses_api(user_id):
+    return call_api_with_cache(user_id,
+                               twitter.statuses.user_timeline,
+                               'twitter.statuses.user_timeline',
+                               parameters={'count' : 200,
+                                           'include_rts':1})
+
 def lookupMulti(user_ids):
     """ """
     method_name = 'twitter.users.lookup'
@@ -145,25 +152,3 @@ def lookupMulti(user_ids):
             except TwitterHTTPError as e:
                 print e
                 logger.error(e)
-
-def use_statuses_api(screen_name):
-    method_name = "twitter.statuses.user_timeline"
-    log_path = cache_file_path(method_name,screen_name)
-
-    if is_cached(method_name,screen_name):
-        logger.debug("statuses for username: %s exists in cache." % screen_name)
-        file = open(log_path)
-        return json.loads(file.read())
-    try:
-        tweets = call_api(twitter.statuses.user_timeline,
-                          {id_or_sn(screen_name): screen_name,
-                           'count': 200,
-                           'include_rts': 1
-                           })
-
-        file = open(log_path, 'w')
-        file.write(json.dumps(tweets))
-        return tweets
-    except TwitterHTTPError as e:
-        print("Exception raised for %s.  Continuing." % (screen_name))
-        return []

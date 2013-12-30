@@ -62,6 +62,10 @@ def cache_file_path(method_name,user):
 def is_cached(method_name,user):
     return os.path.isfile(cache_file_path(method_name,user))
 
+def cache(method_name,user,data):
+    cache_file = open(cache_file_path(method_name,user), 'w')
+    cache_file.write(json.dumps(data))
+
 def call_api_with_cache(user_id, method, method_name):
     # first check the cache
     if is_cached(method_name,user_id):
@@ -74,8 +78,7 @@ def call_api_with_cache(user_id, method, method_name):
         try:
             data = call_api(method,
                             {id_or_sn(user_id):user_id})
-            cache_file = open(cache_file_path(method_name,user_id), 'w')
-            cache_file.write(json.dumps(data))
+            cache(method_name,user,data)
             return data
         except TwitterHTTPError as e:
             logger.error(e)
@@ -127,12 +130,10 @@ def lookupMulti(user_ids):
             try:
                 metadatas = call_api(twitter.users.lookup,
                                      {id_or_sn(query):query})
-                for user in metadatas:
-                    logger.debug(user)
-                    file_path =  os.path.join(CACHE_PATH,method_name,"%s.json" % user['id'])
+                for user_data in metadatas:
+                    cache(method_name,user_data['screen_name'],user_data)
 
-                    file = open(file_path,'w')
-                    file.write(json.dumps(user))
+                return metadatas
 
             except TwitterHTTPError as e:
                 print e

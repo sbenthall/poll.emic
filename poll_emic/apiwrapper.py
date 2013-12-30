@@ -114,13 +114,8 @@ def lookupMulti(user_ids):
                 s = set()
             s.add(user_ids.pop())
     else:
-        new_ids = set()
-        for uid in user_ids:
-            file_path = os.path.join(CACHE_PATH,method_name,"%s.json" % uid)
-            
-            if not os.path.isfile(file_path):
-                new_ids.add(uid)
-    
+        new_ids = [user for user in user_ids if not is_cached(method_name,user)]
+
         print "new ID: ", new_ids
         logger.debug("new ID: %s", new_ids)
     

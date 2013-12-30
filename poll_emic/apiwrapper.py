@@ -13,7 +13,6 @@ import time
 from utils import *
 import ConfigParser
 
-
 config= ConfigParser.ConfigParser()
 config.read('config.cfg')
 

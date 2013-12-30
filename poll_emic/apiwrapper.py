@@ -70,12 +70,16 @@ def clear_cache(method_name,user):
     if is_cached(method_name,user):
         os.remove(cache_file_path(method_name,user))
 
+def read_cache(method_name,user):
+        file = open(cache_file_path(method_name,user))
+        return json.loads(file.read())
+    
+
 def call_api_with_cache(user_id, method, method_name,parameters={}):
     # first check the cache
     if is_cached(method_name,user_id):
         logger.debug("%s %s exists in cache." % (method_name, user_id))
-        file = open(cache_file_path(method_name,user_id))
-        return json.loads(file.read())
+        return read_cache(method_name,user_id)
     else:
     # if not in cache call the API
         logger.debug("%s %s does not exists in cache. Will retrieve it from web." % (method_name, user_id))

@@ -78,7 +78,7 @@ def call_api_with_cache(user_id, method, method_name):
         try:
             data = call_api(method,
                             {id_or_sn(user_id):user_id})
-            cache(method_name,user,data)
+            cache(method_name,user_id,data)
             return data
         except TwitterHTTPError as e:
             logger.error(e)

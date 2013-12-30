@@ -22,13 +22,13 @@ CACHE_PATH = config.get('Settings','cachepath')
 # better to integrate with the method declarations.
 method_names = ["twitter.users.lookup",
                 "twitter.friends.ids",
-                "twitter.followers.ids"]
+                "twitter.followers.ids",
+                "twitter.statuses.user_timeline"]
 
 for method_name in method_names:
     path = os.path.join(CACHE_PATH,method_name)
     if not os.path.exists(path):
         os.makedirs(path)
-
 
 if not os.path.exists(LOGGING_PATH):
     os.makedirs(LOGGING_PATH)

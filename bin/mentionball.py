@@ -40,6 +40,8 @@ def data_to_network(data):
         for tou in data['edges'][fromu].keys():
             G.add_edge(fromu,tou,weight=data['edges'][fromu][tou])
 
+    lookupMulti(G.nodes())
+
     for user in G.nodes():
         pp('Adding node attributes for %s' % user)
 

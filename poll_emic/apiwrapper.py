@@ -65,7 +65,12 @@ def cache(method_name,user,data):
     cache_file = open(cache_file_path(method_name,user), 'w')
     cache_file.write(json.dumps(data))
 
-def call_api_with_cache(user_id, method, method_name):
+def clear_cache(method_name,user):
+    ## TO DO: option to clear whole cache
+    if is_cached(method_name,user):
+        os.remove(cache_file_path(method_name,user))
+
+def call_api_with_cache(user_id, method, method_name,parameters={}):
     # first check the cache
     if is_cached(method_name,user_id):
         logger.debug("%s %s exists in cache." % (method_name, user_id))

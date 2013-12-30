@@ -39,15 +39,16 @@ def data_to_network(data):
     for fromu in data['edges'].keys():
         for tou in data['edges'][fromu].keys():
             G.add_edge(fromu,tou,weight=data['edges'][fromu][tou])
-
-    lookupMulti(G.nodes())
+    
+    pp('Collecting lookup metadata')
+    data['nodes'] = lookup_many(G.nodes())
+    pp("Has metadata for %d users" % len(data.items()))
 
     for user in G.nodes():
         pp('Adding node attributes for %s' % user)
 
         try:
-            data['nodes'][user] = lookup(user)[0] ## can we batch lookup?
-            G[user]['followers_count'] = data['nodes'][user]['followers_count']
+            G.node[user]['followers_count'] = data['nodes'][user]['followers_count']
         except TwitterHTTPError as e:
             print e
             pp("Removing %s" % user)

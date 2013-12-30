@@ -68,10 +68,13 @@ def cache(method_name,user,data):
     cache_file = open(cache_file_path(method_name,user), 'w')
     cache_file.write(json.dumps(data))
 
-def clear_cache(method_name,user):
+def clear_cache(method_name,users):
     ## TO DO: option to clear whole cache
-    if is_cached(method_name,user):
-        os.remove(cache_file_path(method_name,user))
+    users = [users] if type(users) is not list else users
+
+    for user in users:
+        if is_cached(method_name,user):
+            os.remove(cache_file_path(method_name,user))
 
 def read_cache(method_name,user):
         file = open(cache_file_path(method_name,user))

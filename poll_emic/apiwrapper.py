@@ -32,6 +32,7 @@ for method_name in method_names:
 if not os.path.exists(LOGGING_PATH):
     os.makedirs(LOGGING_PATH)
 
+##cruft?
 logger = logging.getLogger('getsnowball')
 #todo: use date/time as the log file name
 hdlr = logging.FileHandler('./logging/getsnowball.log')

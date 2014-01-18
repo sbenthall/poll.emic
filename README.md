@@ -18,7 +18,7 @@ This is a tool for collecting data from Twitter.  Currently the focus is on egoc
 
     python setup.py develop
 
-4. Change the global settings in settings.py to match app credentials to authenticate against eh Twitter API:
+4. Change the configuration in config.cfg to match app credentials to authenticate against eh Twitter API:
 
     [OAuth]
     accesstoken:realaccesstoken

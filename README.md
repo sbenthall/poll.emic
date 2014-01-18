@@ -1,32 +1,33 @@
-This is a tool for visualizing the perspective of a Twitter user's relations with others, based on publically available data.
+This is a tool for collecting data from Twitter.  Currently the focus is on egocentric networks.  After collecting and caching the data, this tool can output the data in .gexf format for visualization.
 
-It is a fork of `topical-topology`, an earlier research project.
+## Python Package Dependencies
 
-## Dependencies
-
-Twitter
-numpy
-networkx
-matplotlib
+* Twitter
+* networkx
+* simplejson
+* nose
 
 ## Setup and configuration
 
-Clone the repository and run
+1. Clone the repository
+2. Go into the local copy
+
+    cd poll.emic
+
+3. Install. Currently 
 
     python setup.py develop
 
-settings.py has the global settings
+4. Change the global settings in settings.py to match app credentials to authenticate against eh Twitter API:
 
-You will also need to supply a file, config.cfg, with the following information to authenticate with the TWitter API:
+    [OAuth]
+    accesstoken:realaccesstoken
+    accesstokenkey:realtokenkey
+    consumerkey:consumerkey
+    consumersecret:consumersecret
 
-[OAuth]
-accesstoken:realaccesstoken
-accesstokenkey:realtokenkey
-consumerkey:consumerkey
-consumersecret:consumersecret
-
-[Settings]
-cachepath:path/to/cache/directory
+    [Settings]
+    cachepath:path/to/cache/directory
 
 ## Usage
 

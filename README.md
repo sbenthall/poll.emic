@@ -1,9 +1,11 @@
 This is a tool for collecting data from Twitter.  Currently the focus is on egocentric networks.  After collecting and caching the data, this tool can output the data in .gexf format for visualization.
 
-## Dependencies
+## Python Package Dependencies
 
 * Twitter
 * networkx
+* simplejson
+* nose
 
 ## Setup and configuration
 

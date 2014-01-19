@@ -9,13 +9,18 @@ def get_mention_counts(user):
 
     pp("Getting mention counts for %s" % user)
 
-    tweets = use_statuses_api(user)
+    try:
+        tweets = use_statuses_api(user)
 
-    mentions = [tweet['entities']['user_mentions']
-                for tweet in tweets]
+        mentions = [tweet['entities']['user_mentions']
+                    for tweet in tweets]
     
-    counts = Counter([user['screen_name']
-                      for user in chain.from_iterable(mentions)])
+        counts = Counter([user['screen_name']
+                          for user in chain.from_iterable(mentions)])
+    except:
+        print("Statuses response for %s was %s" % (user,tweets))
+
+        counts = Counter()
 
     return counts
 
@@ -66,21 +71,24 @@ def clean_ball(graph):
             graph.remove_node(user)
 
 
-def main(ego):
+def main(args):
+
+    egos = [arg[1:] for arg in args if arg[0] is '@']
 
     data = {'nodes': {}, 'edges': {}}
 
-    data = get_mentionball(ego,data)
+    for ego in egos:
+        data = get_mentionball(ego,data)
 
     G = data_to_network(data)
 
     clean_ball(G)
 
-    nx.write_gexf(G,"mentionball-%s.gexf" % ego)
+    nx.write_gexf(G,"mentionball-%s.gexf" % "+".join(egos))
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
-        main(sys.argv[1])
+        main(sys.argv[1:])
     else:
         print "Please include a screen name or user ID for ego as argument."
 

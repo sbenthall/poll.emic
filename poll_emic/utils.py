@@ -1,27 +1,33 @@
 from settings import *
+import calendar
 import os
 import simplejson as json
 import time
 from twitter import TwitterHTTPError
 import numpy
 
-
-def get_followers_count(username):
-    log_name = "%s%s.json"%(LOG_PATH,username) 
-    if os.path.isfile(log_name):
-        log = json.loads(open(log_name,'r').read())
-        return log[0]['user']['followers_count']
-
-
-def call_api(method,arguments,sleep_exp=1):
+def call_api(method,arguments):
     def call_again():
-        s = SLEEP ** sleep_exp
-        print("Sleeping for %d at %s" % (s, time.strftime('%X %x')))
-        time.sleep(s)
+        print "The big sleep"
+        time.sleep(2600)
         return call_api(method,arguments,sleep_exp + 1)
 
     try:
         r = method(**arguments)
+
+        print "Rate limit remaining: %d" % r.rate_limit_remaining
+
+        if r.rate_limit_remaining < 1:
+            sleep_time = r.rate_limit_reset - \
+                calendar.timegm(time.gmtime())
+
+            reset_time = time.strftime("%H:%M:%S",
+                                       time.localtime(r.rate_limit_reset))
+
+            print "Sleeping until %s" % reset_time
+
+            time.sleep(sleep_time)
+            
         return r
     except TwitterHTTPError as e:
         print(e) 

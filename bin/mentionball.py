@@ -13,7 +13,7 @@ def get_mention_counts(user):
         tweets = use_statuses_api(user)
 
         mentions = [tweet['entities']['user_mentions']
-                    for tweet in tweets]
+                    for tweet in tweets if tweet.get('retweeted_status') is None]
     
         counts = Counter([user['screen_name']
                           for user in chain.from_iterable(mentions)])

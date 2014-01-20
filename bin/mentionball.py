@@ -33,7 +33,8 @@ def get_mentionball(ego, data):
     get_mention_data(ego,data)
 
     for user in data['edges'][ego].keys():
-        get_mention_data(user,data)
+        if data['edges'].get(user) is None:
+            get_mention_data(user,data)
 
     return data
 

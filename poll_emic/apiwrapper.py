@@ -142,11 +142,14 @@ def lookup_many(user_ids):
     """ """
     method_name = 'twitter.users.lookup'
 
-    new_users = [user for user in user_ids
-               if not is_cached(method_name,user)]
+    new_users = []
+    cached_users = []
 
-    cached_users = [user for user in user_ids
-               if is_cached(method_name,user)]
+    for user in user_ids:
+        if is_cached(method_name,user):
+            cached_users.append(user)
+        else:
+            new_users.append(user)
 
     data = {}
 

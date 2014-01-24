@@ -2,6 +2,7 @@ from poll_emic.apiwrapper import *
 from collections import Counter
 from itertools import chain
 from pprint import pprint as pp
+from poll_emic.utils import call_api
 import networkx as nx
 import sys
 
@@ -71,10 +72,27 @@ def clean_ball(graph):
             len(graph.neighbors(user)) < 1):
             graph.remove_node(user)
 
+def get_members_from_list(owner,slug):
+    users = call_api(twitter.lists.members,
+                     {'owner_screen_name':owner,'slug':slug})['users']
+
+    return [user['screen_name'] for user in users]
 
 def main(args):
 
-    egos = [arg[1:] for arg in args if arg[0] is '@']
+    egos = []
+
+    for arg in args:
+        # to do: deal with hashtags here
+        if arg[0] is '@':
+            if "/" in arg:
+                parts = arg.split("/")
+                egos.extend(get_members_from_list(parts[0][1:],parts[1]))
+            else:
+                egos.append(arg[1:])
+
+    
+    # replace egos with 
 
     data = {'nodes': {}, 'edges': {}}
 
@@ -85,7 +103,7 @@ def main(args):
 
     clean_ball(G)
 
-    nx.write_gexf(G,"mentionball-%s.gexf" % "+".join(egos))
+    nx.write_gexf(G,"mentionball-%s.gexf" % "+".join(args).replace('/','~'))
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:

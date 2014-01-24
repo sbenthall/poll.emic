@@ -67,6 +67,8 @@ def is_cached(method_name,user):
     return os.path.isfile(cache_file_path(method_name,user))
 
 def cache(method_name,user,data):
+    pp("Caching result of %s for %s" % (method_name,user))
+    pp(type(data))
     cache_file = open(cache_file_path(method_name,user), 'w')
     cache_file.write(json.dumps(data))
 
@@ -155,6 +157,8 @@ def lookup_many(user_ids):
 
     for user in cached_users:
         data[user] = lookup(user)
+        if type(lookup(user)) is list:
+            pp('Watch out for %s' % user)
 
     for user_slice in [new_users[x:x+100]
                        for x

@@ -10,7 +10,7 @@ def call_api(method,arguments):
     def call_again():
         print "The big sleep"
         time.sleep(2600)
-        return call_api(method,arguments,sleep_exp + 1)
+        return call_api(method,arguments)
 
     try:
         r = method(**arguments)
@@ -35,12 +35,7 @@ def call_api(method,arguments):
         # responding to error codes
         # see https://dev.twitter.com/docs/error-codes-responses
         if code == 400: # Invalid request, or rate limited
-            if SLEEP ** (sleep_exp - 1) > 3600:
-                # have slept for over an hour, so not rate limited
-                # something is wrong with request
-                raise e
-            else:
-                return call_again()
+            return call_again()
         elif code == 401: # Unauthorized
             raise e
         elif code == 403: # Forbidden due to update limits

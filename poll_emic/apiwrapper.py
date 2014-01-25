@@ -17,6 +17,7 @@ config= ConfigParser.ConfigParser()
 config.read('config.cfg')
 
 CACHE_PATH = config.get('Settings','cachepath')
+LOGGING_PATH = config.get('Settings','loggingpath')
 
 # better to integrate with the method declarations.
 method_names = ["twitter.users.lookup",
@@ -35,10 +36,10 @@ if not os.path.exists(LOGGING_PATH):
 ##cruft?
 logger = logging.getLogger('getsnowball')
 #todo: use date/time as the log file name
-hdlr = logging.FileHandler('./logging/getsnowball.log')
+hdlr = logging.FileHandler('./' + LOGGING_PATH + '/mentionball.log')
 formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 hdlr.setFormatter(formatter)
-logger.addHandler(hdlr) 
+logger.addHandler(hdlr)
 logger.setLevel(logging.DEBUG)
 
 # determine if the UID is a user ID number or a screenname,

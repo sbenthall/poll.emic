@@ -1,4 +1,3 @@
-from settings import *
 import calendar
 import os
 import simplejson as json

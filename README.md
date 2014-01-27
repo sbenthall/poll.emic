@@ -18,16 +18,8 @@ This is a tool for collecting data from Twitter.  Currently the focus is on egoc
 
     python setup.py develop
 
-4. Change the configuration in config.cfg to match app credentials to authenticate against eh Twitter API:
+4. Add a configuration file `config.cfg` in the top level directory of your working copy.  Include the app credentials that you got from the Twitter API.  See [here](https://github.com/sbenthall/poll.emic/wiki/Sample-Configuration-File) for a sample configuration file.
 
-    [OAuth]
-    accesstoken:realaccesstoken
-    accesstokenkey:realtokenkey
-    consumerkey:consumerkey
-    consumersecret:consumersecret
-
-    [Settings]
-    cachepath:path/to/cache/directory
 
 ## Usage
 

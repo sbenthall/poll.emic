@@ -1,4 +1,5 @@
 from twitter import Twitter, TwitterHTTPError
+import cache
 import ConfigParser
 import urllib2
 import simplejson as json
@@ -16,19 +17,7 @@ import ConfigParser
 config= ConfigParser.ConfigParser()
 config.read('config.cfg')
 
-CACHE_PATH = config.get('Settings','cachepath')
 LOGGING_PATH = config.get('Settings','loggingpath')
-
-# better to integrate with the method declarations.
-method_names = ["twitter.users.lookup",
-                "twitter.friends.ids",
-                "twitter.followers.ids",
-                "twitter.statuses.user_timeline"]
-
-for method_name in method_names:
-    path = os.path.join(CACHE_PATH,method_name)
-    if not os.path.exists(path):
-        os.makedirs(path)
 
 if not os.path.exists(LOGGING_PATH):
     os.makedirs(LOGGING_PATH)
@@ -61,36 +50,12 @@ def id_or_sn(query):
     else:
         raise Exception("UID %s is a %s, not an integer nor string nor a nonempty list" % (query,str(type(query))))
 
-def cache_file_path(method_name,user):
-    return os.path.join(CACHE_PATH,method_name,"%s.json" % user)
-
-def is_cached(method_name,user):
-    return os.path.isfile(cache_file_path(method_name,user))
-
-def cache(method_name,user,data):
-    pp("Caching result of %s for %s" % (method_name,user))
-    pp(type(data))
-    cache_file = open(cache_file_path(method_name,user), 'w')
-    cache_file.write(json.dumps(data))
-
-def clear_cache(method_name,users):
-    ## TO DO: option to clear whole cache
-    users = [users] if type(users) is not list else users
-
-    for user in users:
-        if is_cached(method_name,user):
-            os.remove(cache_file_path(method_name,user))
-
-def read_cache(method_name,user):
-        file = open(cache_file_path(method_name,user))
-        return json.loads(file.read())
-    
 
 def call_api_with_cache(user_id, method, method_name,parameters={}):
     # first check the cache
-    if is_cached(method_name,user_id):
+    if cache.has(method_name,user_id):
         logger.debug("%s %s exists in cache." % (method_name, user_id))
-        return read_cache(method_name,user_id)
+        return cache.read(method_name,user_id)
     else:
     # if not in cache call the API
         logger.debug("%s %s does not exists in cache. Will retrieve it from web." % (method_name, user_id))
@@ -98,7 +63,7 @@ def call_api_with_cache(user_id, method, method_name,parameters={}):
             data = call_api(method,
                             dict([(id_or_sn(user_id),user_id)]
                             + parameters.items()))
-            cache(method_name,user_id,data)
+            cache.write(method_name,user_id,data)
             return data
         except TwitterHTTPError as e:
             logger.error(e)
@@ -149,7 +114,7 @@ def lookup_many(user_ids):
     cached_users = []
 
     for user in user_ids:
-        if is_cached(method_name,user):
+        if cache.has(method_name,user):
             cached_users.append(user)
         else:
             new_users.append(user)
@@ -173,7 +138,7 @@ def lookup_many(user_ids):
                                  {id_or_sn(query):query})
             for user_data in metadatas:
                 screen_name = user_data['screen_name']
-                cache(method_name,screen_name,user_data)
+                cache.write(method_name,screen_name,user_data)
                 data[screen_name] = user_data
 
         except TwitterHTTPError as e:

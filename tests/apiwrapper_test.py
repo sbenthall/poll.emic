@@ -1,5 +1,6 @@
 from nose.tools import *
 from poll_emic.apiwrapper import *
+import poll_emic.cache as cache
 import logging
 import itertools
 
@@ -7,8 +8,8 @@ test_user = 'twitter'
 test_users = [test_user,'sbenthall']
 
 def setup():
-    for method in method_names:
-        clear_cache(method,test_users)
+    for method in cache.method_names:
+        cache.clear(method,test_users)
     print "SETUP!"
 
 def teardown():
@@ -44,5 +45,5 @@ def lookup_many_test():
     assert isinstance(data,dict), 'lookup_many data is not a dict'
     assert len(data.items()) == 2, 'lookup_many did not return 2 profiles'
 
-    clear_cache('twitter.users.lookup',test_user)
+    cache.clear('twitter.users.lookup',test_user)
     data = lookup_many(itertools.repeat(test_user,110))

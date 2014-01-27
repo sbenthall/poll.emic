@@ -6,4 +6,4 @@ logs/
 .idea/
 *.gexf
 poll.emic.egg-info
-*.cfg
+cache/

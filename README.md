@@ -23,8 +23,8 @@ This is a tool for collecting data from Twitter.  Currently the focus is on egoc
 
 ## Usage
 
-For one application of this, try running the getsnowball script.
+For one application of this, try running the getmentionball script.
 
-    python bin/getsnowball.py
+    python bin/getsmentionball.py @twitter
 
-This should start crawling a snowball centered on a particular Twitter user.
+This should start crawling a mentionball centered on a particular Twitter user.

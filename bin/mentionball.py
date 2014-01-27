@@ -72,11 +72,6 @@ def clean_ball(graph):
             len(graph.neighbors(user)) < 1):
             graph.remove_node(user)
 
-def get_members_from_list(owner,slug):
-    users = call_api(twitter.lists.members,
-                     {'owner_screen_name':owner,'slug':slug})['users']
-
-    return [user['screen_name'] for user in users]
 
 def main(args):
 

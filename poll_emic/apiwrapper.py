@@ -146,3 +146,9 @@ def lookup_many(user_ids):
             logger.error(e)
 
     return data
+
+def get_members_from_list(owner,slug):
+    users = call_api(twitter.lists.members,
+                     {'owner_screen_name':owner,'slug':slug})['users']
+
+    return [user['screen_name'] for user in users]

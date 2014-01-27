@@ -6,6 +6,7 @@ import itertools
 
 test_user = 'twitter'
 test_users = [test_user,'sbenthall']
+test_list = 'engineering'
 
 def setup():
     for method in cache.method_names:
@@ -47,3 +48,9 @@ def lookup_many_test():
 
     cache.clear('twitter.users.lookup',test_user)
     data = lookup_many(itertools.repeat(test_user,110))
+
+@with_setup(setup,teardown)
+def get_members_from_list(owner,slug):
+    members = get_members_from_list(test_user,test_list)
+    assert isinstance(members,list)
+    assert isinstance(members[0],string)

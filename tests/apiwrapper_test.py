@@ -17,8 +17,8 @@ def teardown():
 @with_setup(setup,teardown)
 def lookup_test():
     data = lookup(test_user)
-    assert isinstance(data,list), 'output is not a list'
-    assert data[0]['screen_name'] == 'twitter', 'mismatched screen_name'
+    assert isinstance(data,dict), 'output is not a dict'
+    assert data['screen_name'] == 'twitter', 'mismatched screen_name'
 
 @with_setup(setup,teardown)
 def get_friends_test():

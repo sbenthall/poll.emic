@@ -148,7 +148,21 @@ def lookup_many(user_ids):
     return data
 
 def get_members_from_list(owner,slug):
-    users = call_api(twitter.lists.members,
-                     {'owner_screen_name':owner,'slug':slug})['users']
+
+    cursor = -1
+    users = []
+ 
+    pp("Gettings users from list @%s/%s" % (owner,slug))
+
+    while cursor != 0:
+        pp("cursor: %d" % cursor)
+        response_dictionary = call_api(twitter.lists.members,
+                                       {'owner_screen_name':owner,
+                                        'slug':slug,
+                                        'cursor':cursor})
+        users.extend(response_dictionary['users'])
+        cursor = response_dictionary['next_cursor']
+
+    pp('Retrieved %d users from list' % len(users))
 
     return [user['screen_name'] for user in users]

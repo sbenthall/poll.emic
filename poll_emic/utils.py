@@ -7,8 +7,8 @@ import numpy
 
 def call_api(method,arguments):
     def call_again():
-        print "The big sleep"
-        time.sleep(2600)
+        print "Error received. Did not catch properly. Sleeping 17 minutes"
+        time.sleep(1020)
         return call_api(method,arguments)
 
     try:

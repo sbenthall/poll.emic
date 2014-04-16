@@ -1,43 +1,9 @@
 from poll_emic.apiwrapper import *
-from collections import Counter
-from itertools import chain
+from poll_emic.sample import *
 from pprint import pprint as pp
 from poll_emic.utils import call_api
 import networkx as nx
 import sys
-
-def get_mention_counts(user):
-
-    pp("Getting mention counts for %s" % user)
-
-    try:
-        tweets = use_statuses_api(user)
-
-        mentions = [tweet['entities']['user_mentions']
-                    for tweet in tweets if tweet.get('retweeted_status') is None]
-    
-        counts = Counter([user['screen_name']
-                          for user in chain.from_iterable(mentions)])
-    except:
-        print("Statuses response for %s was %s" % (user,tweets))
-
-        counts = Counter()
-
-    return counts
-
-def get_mention_data(user,data):
-    data['edges'][user] = get_mention_counts(user)
-
-
-def get_mentionball(ego, data):
-
-    get_mention_data(ego,data)
-
-    for user in data['edges'][ego].keys():
-        if data['edges'].get(user) is None:
-            get_mention_data(user,data)
-
-    return data
 
 
 def data_to_network(data):
@@ -92,7 +58,7 @@ def main(args):
     data = {'nodes': {}, 'edges': {}}
 
     for ego in egos:
-        data = get_mentionball(ego,data)
+        data = get_mentionball(ego,data,only_replies=True)
 
     G = data_to_network(data)
 

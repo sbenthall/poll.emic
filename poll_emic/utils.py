@@ -3,7 +3,6 @@ import os
 import simplejson as json
 import time
 from twitter import TwitterHTTPError
-import numpy
 
 def call_api(method,arguments):
     def call_again():
@@ -55,13 +54,3 @@ def call_api(method,arguments):
             raise e
 
 
-
-def normalize(dist):
-    return (dist.T / sum(dist.T).T).T
-
-#this is a hack
-EPSILON = 0.0000000000000001
-
-def entropy(dist):
-    nd = normalize(dist) + EPSILON
-    return 0 - sum((nd * numpy.log(nd)).T).T

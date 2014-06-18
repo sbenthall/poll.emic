@@ -10,7 +10,7 @@ config = {
     'download_url': 'https://github.com/sbenthall/poll.emic',
     'author_email': 'sb@ischool.berkeley.edu',
     'version': '0.1',
-    'install_requires': ['nose','simplejson','twitter','networkx','numpy'],
+    'install_requires': ['nose','simplejson','twitter','networkx'],
     'packages': ['poll_emic'],
     'scripts': [],
     'name': 'poll.emic'

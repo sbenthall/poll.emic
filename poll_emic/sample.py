@@ -41,11 +41,21 @@ def get_mention_counts(user,only_replies=False):
 
 def get_mentionball(ego,data,only_replies=False):
 
+    data['nodes'][ego] = {'depth':0}
+    
     data['edges'][ego] = get_mention_counts(ego,only_replies=only_replies)
 
     for user in data['edges'][ego].keys():
+        if user not in data['nodes']:
+            data['nodes'][user] = {'depth':1}
+        elif data['nodes'][user]['depth'] > 1:
+            data['nodes'][user]['depth'] = 1
+
         if data['edges'].get(user) is None:
             data['edges'][user] = get_mention_counts(user,only_replies=only_replies)
+            for leaf in data['edges'][user].keys():
+                if leaf not in data['nodes']:
+                    data['nodes'][leaf] = {'depth':2}
 
     return data
 

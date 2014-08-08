@@ -3,6 +3,7 @@ import os
 import simplejson as json
 import time
 from twitter import TwitterHTTPError
+from copy import deepcopy
 
 def call_api(method,arguments):
     def call_again():
@@ -16,7 +17,7 @@ def call_api(method,arguments):
         print "Rate limit remaining: %d" % r.rate_limit_remaining
 
         if r.rate_limit_remaining < 1:
-            sleep_time = r.rate_limit_reset - \
+            sleep_time = 60 + r.rate_limit_reset - \
                 calendar.timegm(time.gmtime())
 
             reset_time = time.strftime("%H:%M:%S",
@@ -35,6 +36,9 @@ def call_api(method,arguments):
         if code == 400: # Invalid request, or rate limited
             return call_again()
         elif code == 401: # Unauthorized
+            ## It would be better to cache these results
+            ## as unauthorized--this status does not change
+            ## frequently and 
             raise e
         elif code == 403: # Forbidden due to update limits
             raise e
@@ -52,5 +56,4 @@ def call_api(method,arguments):
             return call_again()
         else:
             raise e
-
 

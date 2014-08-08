@@ -99,12 +99,21 @@ def get_followers(user_id):
 
     return friends
 
-def use_statuses_api(user_id):
-    return call_api_with_cache(user_id,
-                               twitter.statuses.user_timeline,
-                               'twitter.statuses.user_timeline',
-                               parameters={'count' : 200,
-                                           'include_rts':1})
+def use_statuses_api(user_id,grace=True):
+    try:
+        return call_api_with_cache(user_id,
+                                   twitter.statuses.user_timeline,
+                                   'twitter.statuses.user_timeline',
+                                   parameters={'count' : 200,
+                                               'include_rts':1})
+    except e:
+        ## To do better, need to handle 401 errors specially.
+        ## Better to do this in the utils, passing up a representation
+        ## to methods upstream
+        if grace:
+            return []
+        else:
+            raise
 
 def lookup_many(user_ids):
     """ """
@@ -121,11 +130,15 @@ def lookup_many(user_ids):
 
     data = {}
 
+    pp("Retrieving user metadata from cache")
+
     for user in cached_users:
         data[user] = lookup(user)
         if type(lookup(user)) is list:
             pp('Watch out for %s' % user)
 
+    pp("Using API to lookup data from %d new users" % len(new_users))
+    
     for user_slice in [new_users[x:x+100]
                        for x
                        in xrange(0,len(new_users),100)]:
@@ -134,6 +147,7 @@ def lookup_many(user_ids):
         logger.debug("Query is %s" % query)
 
         try:
+            pp("Requesting user slice...")
             metadatas = call_api(twitter.users.lookup,
                                  {id_or_sn(query):query})
             for user_data in metadatas:
@@ -141,7 +155,11 @@ def lookup_many(user_ids):
                 cache.write(method_name,screen_name,user_data)
                 data[screen_name] = user_data
 
+            pp("Successfully wrote slice to cache")
+
         except TwitterHTTPError as e:
+            ## is there something more graceful to be done with 404's here?
+            ## maybe...if we handle unauthorized requests better.
             print e
             logger.error(e)
 

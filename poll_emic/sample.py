@@ -31,8 +31,9 @@ def get_mention_counts(user,only_replies=False):
     
         counts = Counter([user['screen_name']
                           for user in chain.from_iterable(mentions)])
-    except:
+    except Exception as e:
         print("Statuses response for %s was broke" % (user))
+        print(e)
 
         counts = Counter()
 

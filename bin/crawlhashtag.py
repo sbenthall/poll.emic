@@ -10,11 +10,17 @@ def main(args):
     users = []
     tags = []
 
+    #Will cache tweets in batches
+    save_rate = 100
+
     for arg in args:
         # to do: deal with hashtags here
         # proper regexes here please
         if arg[0] is '@':
             users.append(arg[1:])
+        if arg[0] is '%':
+            print "Setting save rate to %s" % (arg[1:])
+            save_rate = int(arg[1:])
         else:
             tags.append(arg)
 
@@ -25,9 +31,6 @@ def main(args):
     twitter_stream = TwitterStream(auth=oauth,domain=domain)
 
     iterator = twitter_stream.statuses.filter(track=','.join(tags))
-
-    #Will cache tweets in batches
-    save_rate = 100
     
     counter = 0
 
@@ -39,7 +42,7 @@ def main(args):
         pp(tweet)
         recent_tweets.append(tweet)
 
-        if counter % 20 == 0:
+        if counter % save_rate == 0:
             counter = 0
 
             # prepare timestamp
